@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.pp.sina.dao.users.SinaUsersDao">
+
+	<!-- 获取数据表中的最大bid -->
+	<select id="getMaxBid" parameterType="UsersSelectParams" resultType="int">
+		SELECT MAX(`bid`) FROM ${tablename};
+	</select>
+
+	<!-- 获取新浪用户基础信息，批量查询 -->
+	<select id="getSinaUserInfos" parameterType="UsersSelectParams" resultType="UserInfo">
+		SELECT `id`,`screen_name`,`name`,`province`,`city`,`location`,`description`,`url`,`profile_image_url`,
+		`domain`,`gender`,`followers_count`,`friends_count`,`statuses_count`,`favourites_count`,`created_at`,
+		`verified`,`verified_type`,`avatar_large`,`bi_followers_count`,`remark`,`verified_reason`,`weihao`
+		 FROM ${tablename} WHERE `bid` BETWEEN #{low} AND #{high};
+	</select>
+
+	<!-- 获取新浪用户基础信息，单个查询 -->
+	<select id="getSinaUserInfo" parameterType="UserSelectParams" resultType="UserInfo">
+		SELECT `id`,`screen_name`,`name`,`province`,`city`,`location`,`description`,`url`,`profile_image_url`,
+		`domain`,`gender`,`followers_count`,`friends_count`,`statuses_count`,`favourites_count`,`created_at`,
+		`verified`,`verified_type`,`avatar_large`,`bi_followers_count`,`remark`,`verified_reason`,`weihao`
+		 FROM ${tablename} WHERE `id` = #{username} LIMIT 1;
+	</select>
+
+	<!-- 插入新浪用户基础信息 -->
+	<insert id="insertSinaUserInfo" parameterType="UserInsertParams"
+		useGeneratedKeys="true" keyProperty="bid" flushCache="true" statementType="PREPARED">
+		INSERT INTO ${tablename}
+		(`id`,`screen_name`,`name`,`province`,`city`,`location`,`description`,`url`,`profile_image_url`,
+		`domain`,`gender`,`followers_count`,`friends_count`,`statuses_count`,`favourites_count`,`created_at`,
+		`verified`,`verified_type`,`avatar_large`,`bi_followers_count`,`remark`,`verified_reason`,`weihao`,
+		`lasttime`) VALUES
+		(#{id},#{screen_name},#{name},#{province},#{city},#{location},#{description},
+		#{url},#{profile_image_url},#{domain},#{gender},#{followers_count},#{friends_count},#{statuses_count},
+		#{favourites_count},#{created_at},#{verified},#{verified_type},#{avatar_large},#{bi_followers_count},
+		#{remark},#{verified_reason},#{weihao},#{lasttime});
+	</insert>
+
+	<!-- 删除新浪用户基础信息 -->
+	<delete id="deleteSinaUserInfo" parameterType="UserSelectParams">
+		DELETE FROM ${tablename} WHERE `id` = #{username};
+	</delete>
+
+	<!-- 更新新浪用户基础信息，更新不存在用户 -->
+	<update id="updateSinaUserInfo" parameterType="UserSelectParams">
+		UPDATE ${tablename} SET `name`='unexisted' WHERE `id` = #{username};
+	</update>
+
+</mapper>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.pp.sina.dao.friends.SinaFriendsDao">
+
+	<!-- 插入新浪用户基础信息 -->
+	<insert id="insertSinaFriendsInfo" parameterType="FriendsInsertParams"
+		useGeneratedKeys="true" keyProperty="bid" flushCache="true" statementType="PREPARED">
+		INSERT INTO ${tablename} (`username`,`friendsuids`,`friendscount`,`lasttime`) VALUES (#{username},#{friendsuids},#{friendscount},#{lasttime});
+	</insert>
+
+	<!-- 获取新浪用户基础信息，单个查询 -->
+	<select id="getSinaFriendsInfo" parameterType="FriendsSelectParams" resultType="FriendsInfo">
+	    SELECT `username`,`friendsuids`,`friendscount` FROM ${tablename} WHERE `username` = #{username};
+	</select>
+
+	<!-- 更新新浪用户基础信息，更新不存在用户 -->
+	<update id="updateSinaFriendsInfo" parameterType="FriendsInsertParams">
+		UPDATE ${tablename} SET `friendsuids` = #{friendsuids}, `friendscount` = #{friendscount} WHERE `username` = #{username};
+	</update>
+
+	<!-- 删除新浪用户基础信息 -->
+	<delete id="deleteSinaFriendsInfo" parameterType="FriendsSelectParams">
+	    DELETE FROM ${tablename} WHERE `username` = #{username};
+	</delete>
+
+</mapper>

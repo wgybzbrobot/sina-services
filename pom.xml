@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>cc.pp.datacenter</groupId>
+	<artifactId>sina-services</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>Sina Services</name>
+	<description>Sina Data Services with FansAnalysis and WeiboAnalysis</description>
+
+	<modules>
+		<module>parent</module>
+		<module>sina-parent</module>
+		<module>sina-bozhus</module>
+		<module>sina-solr</module>
+		<module>sina-tokens</module>
+		<module>sina-algorithms</module>
+		<module>sina-query</module>
+		<module>sina-web</module>
+		<module>sina-mapred</module>
+		<module>fuzzy-search</module>
+		<module>content-library</module>
+		<module>ppcc-emotion</module>
+		<module>ppcc-nlp</module>
+		<module>sina-domain</module>
+		<module>sina-dao</module>
+		<module>sina-utils</module>
+	</modules>
+
+</project>

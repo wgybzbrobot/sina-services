@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="data_db.properties">
+		<property name="db_driver" value="com.mysql.jdbc.Driver" />
+		<property name="db_encoding" value="UTF8" />
+	</properties>
+	<typeAliases>
+		<!-- 博主库相关 -->
+		<typeAlias alias="SimpleFansInfo" type="cc.pp.sina.domain.bozhus.SimpleFansInfo" />
+		<typeAlias alias="BozhuBaseInfo" type="cc.pp.sina.domain.bozhus.BozhuBaseInfo" />
+		<typeAlias alias="BaseInfoParams" type="cc.pp.sina.domain.params.BaseInfoParams" />
+		<typeAlias alias="UserExtendInfo" type="cc.pp.sina.domain.bozhus.UserExtendInfo" />
+		<typeAlias alias="ExtendSelectParams"
+			type="cc.pp.sina.domain.params.ExtendSelectParams" />
+		<typeAlias alias="UserBaseInfo" type="cc.pp.sina.domain.sql.UserBaseInfo" />
+		<!-- 企业用户相关 -->
+		<typeAlias alias="CompanySelectParams" type="cc.pp.sina.domain.sql.CompanySelectParams" />
+		<typeAlias alias="AllCompanyParams" type="cc.pp.sina.domain.sql.AllCompanyParams" />
+		<!-- 内容库统计相关 -->
+		<typeAlias alias="PPTimerSelectParams"
+			type="cc.pp.sina.domain.timer.library.PPTimerSelectParams" />
+		<typeAlias alias="TimerInsertParams"
+			type="cc.pp.sina.domain.timer.library.TimerInsertParams" />
+		<!-- 转换工具相关 -->
+		<typeAlias alias="TransUidInsertParams"
+			type="cc.pp.sina.domain.tool.TransUidInsertParams" />
+		<typeAlias alias="TransUidSelectParams"
+			type="cc.pp.sina.domain.tool.TransUidSelectParams" />
+		<typeAlias alias="TransUidInfo" type="cc.pp.sina.domain.tool.TransUidInfo" />
+		<!-- 新浪用户基础信息相关 -->
+		<typeAlias alias="SinaUserInfo" type="cc.pp.sina.domain.users.SinaUserInfo" />
+		<typeAlias alias="UserInsertParams" type="cc.pp.sina.domain.users.UserInsertParams" />
+		<typeAlias alias="UserSelectParams" type="cc.pp.sina.domain.users.UserSelectParams" />
+		<typeAlias alias="UsersSelectParams" type="cc.pp.sina.domain.users.UsersSelectParams" />
+		<typeAlias alias="UserInfo" type="cc.pp.sina.domain.users.UserInfo" />
+		<!-- 新浪用户关注数据相关 -->
+		<typeAlias alias="FriendsInfo" type="cc.pp.sina.domain.friends.FriendsInfo" />
+		<typeAlias alias="FriendsInsertParams"
+			type="cc.pp.sina.domain.friends.FriendsInsertParams" />
+		<typeAlias alias="FriendsSelectParams"
+			type="cc.pp.sina.domain.friends.FriendsSelectParams" />
+		<!-- 新浪用户微博数据相关 -->
+		<typeAlias alias="TablenameInsertParams"
+			type="cc.pp.sina.domain.weibos.TablenameInsertParams" />
+		<typeAlias alias="WeiboInfo" type="cc.pp.sina.domain.weibos.WeiboInfo" />
+		<typeAlias alias="WeiboInfoOld" type="cc.pp.sina.domain.weibos.WeiboInfoOld" />
+		<typeAlias alias="WeiboInsertParams"
+			type="cc.pp.sina.domain.weibos.WeiboInsertParams" />
+		<typeAlias alias="WeiboSelectParams"
+			type="cc.pp.sina.domain.weibos.WeiboSelectParams" />
+		<typeAlias alias="WeibosSelectParams"
+			type="cc.pp.sina.domain.weibos.WeibosSelectParams" />
+	</typeAliases>
+	<environments default="local">
+		<environment id="local">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="url" value="${db_url_local}" />
+				<property name="username" value="${db_username_local}" />
+				<property name="password" value="${db_password_local}" />
+				<property name="driver" value="${db_driver}" />
+				<property name="driver.encoding" value="${db_encoding}" />
+				<property name="poolPingEnabled" value="true" />
+				<property name="poolPingQuery" value="select 1" />
+				<property name="poolPingConnectionsNotUsedFor" value="5000" />
+			</dataSource>
+		</environment>
+		<environment id="wuhu">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="url" value="${db_url_wuhu}" />
+				<property name="username" value="${db_username_wuhu}" />
+				<property name="password" value="${db_password_wuhu}" />
+				<property name="driver" value="${db_driver}" />
+				<property name="driver.encoding" value="${db_encoding}" />
+				<property name="poolPingEnabled" value="true" />
+				<property name="poolPingQuery" value="select 1" />
+				<property name="poolPingConnectionsNotUsedFor" value="5000" />
+			</dataSource>
+		</environment>
+		<environment id="beijing">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="url" value="${db_url_beijing}" />
+				<property name="username" value="${db_username_beijing}" />
+				<property name="password" value="${db_password_beijing}" />
+				<property name="driver" value="${db_driver}" />
+				<property name="driver.encoding" value="${db_encoding}" />
+				<property name="poolPingEnabled" value="true" />
+				<property name="poolPingQuery" value="select 1" />
+				<property name="poolPingConnectionsNotUsedFor" value="5000" />
+			</dataSource>
+		</environment>
+		<environment id="tongling">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="url" value="${db_url_tongling}" />
+				<property name="username" value="${db_username_tongling}" />
+				<property name="password" value="${db_password_tongling}" />
+				<property name="driver" value="${db_driver}" />
+				<property name="driver.encoding" value="${db_encoding}" />
+				<property name="poolPingEnabled" value="true" />
+				<property name="poolPingQuery" value="select 1" />
+				<property name="poolPingConnectionsNotUsedFor" value="5000" />
+			</dataSource>
+		</environment>
+		<environment id="pp">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="url" value="${db_url_pp}" />
+				<property name="username" value="${db_username_pp}" />
+				<property name="password" value="${db_password_pp}" />
+				<property name="driver" value="${db_driver}" />
+				<property name="driver.encoding" value="${db_encoding}" />
+				<property name="poolPingEnabled" value="true" />
+				<property name="poolPingQuery" value="select 1" />
+				<property name="poolPingConnectionsNotUsedFor" value="5000" />
+			</dataSource>
+		</environment>
+		<environment id="read">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${db_driver}" />
+				<property name="url" value="${db_url_read}" />
+				<property name="username" value="${db_username_read}" />
+				<property name="password" value="${db_password_read}" />
+				<property name="driver.encoding" value="${db_encoding}" />
+				<property name="poolPingEnabled" value="true" />
+				<property name="poolPingQuery" value="select 1" />
+				<property name="poolPingConnectionsNotUsedFor" value="5000" />
+			</dataSource>
+		</environment>
+		<environment id="write">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${db_driver}" />
+				<property name="url" value="${db_url_write}" />
+				<property name="username" value="${db_username_write}" />
+				<property name="password" value="${db_password_write}" />
+				<property name="driver.encoding" value="${db_encoding}" />
+				<property name="poolPingEnabled" value="true" />
+				<property name="poolPingQuery" value="select 1" />
+				<property name="poolPingConnectionsNotUsedFor" value="5000" />
+			</dataSource>
+		</environment>
+		<environment id="friend1">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="url" value="${db_url_friend1}" />
+				<property name="username" value="${db_username_wuhu}" />
+				<property name="password" value="${db_password_wuhu}" />
+				<property name="driver" value="${db_driver}" />
+				<property name="driver.encoding" value="${db_encoding}" />
+				<property name="poolPingEnabled" value="true" />
+				<property name="poolPingQuery" value="select 1" />
+				<property name="poolPingConnectionsNotUsedFor" value="5000" />
+			</dataSource>
+		</environment>
+		<environment id="friend2">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="url" value="${db_url_friend2}" />
+				<property name="username" value="${db_username_wuhu}" />
+				<property name="password" value="${db_password_wuhu}" />
+				<property name="driver" value="${db_driver}" />
+				<property name="driver.encoding" value="${db_encoding}" />
+				<property name="poolPingEnabled" value="true" />
+				<property name="poolPingQuery" value="select 1" />
+				<property name="poolPingConnectionsNotUsedFor" value="5000" />
+			</dataSource>
+		</environment>
+		<environment id="other">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="url" value="${db_url_other}" />
+				<property name="username" value="${db_username_other}" />
+				<property name="password" value="${db_password_other}" />
+				<property name="driver" value="${db_driver}" />
+				<property name="driver.encoding" value="${db_encoding}" />
+				<!-- <property name="poolPingEnabled" value="true" /> <property name="poolPingQuery" 
+					value="select 1" /> <property name="poolPingConnectionsNotUsedFor" value="5000" 
+					/> -->
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="BaseInfoDaoMapper.xml" />
+		<mapper resource="ComputeResultDaoMapper.xml" />
+		<mapper resource="PPCompanyDaoMapper.xml" />
+		<mapper resource="PPTimerDaoMapper.xml" />
+		<mapper resource="TransUidDaoMapper.xml" />
+		<mapper resource="SinaUsersDaoMapper.xml" />
+		<mapper resource="SinaFriendsDaoMapper.xml" />
+		<mapper resource="SinaWeibosDaoMapper.xml" />
+		<mapper resource="BozhuLibraryDaoMapper.xml" />
+		<mapper resource="PPUsersDaoMapper.xml" />
+		<package name="cc.pp.sina.dao.price" />
+	</mappers>
+</configuration>
+	

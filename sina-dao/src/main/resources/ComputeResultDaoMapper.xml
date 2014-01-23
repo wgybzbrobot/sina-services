@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.pp.sina.dao.bozhus.ComputeInfoDao">
+
+	<!-- 获取新浪粉丝分析结果数据 -->
+	<select id="getFansAnalysisResult" parameterType="long" resultType="string">
+		SELECT `result` FROM pp_sina_fans_analysis_result WHERE `username` = #{uid};
+	</select>
+
+</mapper>

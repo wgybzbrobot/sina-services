@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.pp.sina.dao.tool.TransUidDao">
+	
+	<!-- 插入转换结果数据 -->
+	<insert id="insertTransUidInfo" parameterType="TransUidInsertParams" flushCache="true" statementType="PREPARED">
+		INSERT INTO ${tablename} (identify,url,username,nickname) VALUES (#{identify},#{url},#{username},#{nickname});
+	</insert>
+
+    <!-- 获取转换结果数据 -->
+	<select id="getTransUidInfos" parameterType="TransUidSelectParams" resultType="TransUidInfo">
+		SELECT `url`,`username`,`nickname` FROM ${tablename} WHERE `identify`= #{identify} ORDER BY `id` ASC;
+	</select>
+	
+</mapper>

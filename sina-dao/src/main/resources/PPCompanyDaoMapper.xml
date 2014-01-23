@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.pp.sina.dao.company.PPCompanyDao">
+
+	<!-- 根据Uid获取企业用户数据 -->
+	<select id="getCompanyInfo" parameterType="CompanySelectParams" resultType="UserBaseInfo">
+		SELECT * FROM ${tablename} WHERE `id` = #{username};
+	</select>
+	
+    <!-- 获取全部企业用户数据 -->
+	<select id="getAllCompanyInfos" parameterType="AllCompanyParams" resultType="UserBaseInfo">
+		SELECT * FROM ${tablename};
+	</select>
+	
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.pp.sina.dao.bozhus.CommonInfoDao">
+
+	<!-- 获取新浪用户粉丝数据 -->
+	<select id="getFansByUid" parameterType="long" resultType="SimpleFansInfo">
+		SELECT `username`,`fansuids`,`fanscount` FROM pp_sina_fans WHERE
+		`username` = #{uid};
+	</select>
+	
+	<!-- 获取博主基础数据信息 -->
+	<select id="getUserBaseInfo" parameterType="BaseInfoParams" resultType="BozhuBaseInfo">
+	    SELECT * FROM ${tablename} WHERE `id` = #{uid};
+	</select>
+	
+	<!-- 获取新浪用户扩展数据 -->
+	<select id="getExtendInfo" parameterType="ExtendSelectParams" resultType="UserExtendInfo">
+		SELECT `username`,`tags`,`isppuser`,`isreal` FROM ${tablename} WHERE `username` = #{username};
+	</select>
+
+</mapper>

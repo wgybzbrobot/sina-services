@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.pp.sina.dao.timer.pictures.PPTimerDao">
+
+    <!-- 获取图片数据 -->
+	<select id="getTimerPicInfos" parameterType="PPTimerSelectParams" resultType="string">
+	    <!-- 
+		SELECT `pictures` FROM ${tablename} WHERE <![CDATA[`lasttime`>=#{starttime} AND `lasttime`<=#{endtime}]]>;
+		-->
+		SELECT `pictures` FROM ${tablename} WHERE `realtime` BETWEEN #{starttime} AND #{endtime};
+	</select>
+	
+	<!-- 插入统计结果数据 -->
+	<insert id="insertTimerPicResult" parameterType="TimerInsertParams" flushCache="true" statementType="PREPARED">
+		INSERT INTO ${tablename} (date,name,count) VALUES (#{date},#{name},#{count});
+	</insert>
+	
+</mapper>
