@@ -52,7 +52,7 @@ public class HistoryWeibosDumpMain {
 		/**
 		 * 链接数据库
 		 */
-		WeiboJDBC weiboJDBC = new WeiboJDBC("192.168.1.38", "pp_fenxi", "q#tmuYzC@sqB6!ok@sHd", "pp_fenxi");
+		WeiboJDBC weiboJDBC = new WeiboJDBC("192.168.1.32", "pp_fenxi", "q#tmuYzC@sqB6!ok@sHd", "pp_fenxi");
 		if (!weiboJDBC.dbConnection()) {
 			logger.info("Db connected error.");
 			return;
@@ -78,7 +78,7 @@ public class HistoryWeibosDumpMain {
 		try (BufferedReader br = new BufferedReader(new FileReader(new File("existed_uids")));) {
 			String uid = "";
 			while ((uid = br.readLine()) != null) {
-				if (count > 1_6965_8000) {
+				if (count > 1_8800_0000) {
 					logger.info("Read at: " + count);
 					if (uid.length() < 5) {
 						logger.info("Uid: " + uid + " is invalid.");

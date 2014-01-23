@@ -40,7 +40,7 @@ public class WeiboJDBC {
 	private String db_port;
 	private final String db_url;
 
-	private BasicDataSource datasource;
+	private BasicDataSource dataSource;
 
 	/**
 	 * 线上环境
@@ -64,11 +64,13 @@ public class WeiboJDBC {
 	 * 链接数据库
 	 */
 	public boolean dbConnection() {
-		datasource = new BasicDataSource();
-		datasource.setDriverClassName("com.mysql.jdbc.Driver");
-		datasource.setUsername(db_user);
-		datasource.setPassword(db_password);
-		datasource.setUrl(db_url);
+		dataSource = new BasicDataSource();
+		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+		dataSource.setUsername(db_user);
+		dataSource.setPassword(db_password);
+		dataSource.setUrl(db_url);
+		dataSource.setTestOnBorrow(true);
+		dataSource.setValidationQuery("select 1");
 		return true;
 	}
 
@@ -77,7 +79,7 @@ public class WeiboJDBC {
 	 */
 	private Connection getConnection() {
 		try {
-			return datasource.getConnection();
+			return dataSource.getConnection();
 		} catch (SQLException e) {
 			throw new RuntimeException();
 		}
@@ -106,7 +108,7 @@ public class WeiboJDBC {
 	 */
 	public void dbClose() {
 		try {
-			datasource.close();
+			dataSource.close();
 		} catch (SQLException e) {
 			logger.info("Db close error.");
 		}
@@ -917,7 +919,7 @@ public class WeiboJDBC {
 		String sql = "SELECT * FROM " + tablename + " WHERE `wid` = " + wid;
 		try (Connection conn = getConnection();
 				Statement statement = conn.createStatement();
-				ResultSet rs = statement.executeQuery(sql)) {
+				ResultSet rs = statement.executeQuery(sql);) {
 			if (rs.next()) {
 				return true;
 			} else {

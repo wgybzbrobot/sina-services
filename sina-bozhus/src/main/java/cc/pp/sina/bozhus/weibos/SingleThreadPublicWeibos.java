@@ -24,12 +24,8 @@ public class SingleThreadPublicWeibos {
 	 * 测试函数
 	 */
 	public static void main(String[] args) {
-
 		try {
 			SingleThreadPublicWeibos.start();
-		} catch (SQLException e) {
-			logger.error("SQLException: " + e.getMessage());
-			e.printStackTrace();
 		} catch (Exception e) {
 			logger.error("Exception: " + e.getMessage());
 			e.printStackTrace();
@@ -39,7 +35,7 @@ public class SingleThreadPublicWeibos {
 	/**
 	 * 启动
 	 */
-	public static void start() throws SQLException {
+	public static void start() {
 
 		/**
 		 * 从150上获取token数据
@@ -53,36 +49,48 @@ public class SingleThreadPublicWeibos {
 		 */
 		WeiboJDBC weiboJDBC = new WeiboJDBC("192.168.1.39", "pp_fenxi", "q#tmuYzC@sqB6!ok@sHd", "pp_fenxi");
 		if (!weiboJDBC.dbConnection()) {
-			logger.info("Db connected error.");
+			logger.info("Db connected unsucessful.");
 			return;
+		} else {
+			logger.info("Db connected sucessful.");
 		}
 
-		// 创建存放表名表
-		weiboJDBC.createTablenamesTable(SINA_USER_WEIBOS_TABLENAMES);
 		// 获取表名
 		String tablename = SINA_USER_WEIBOS + System.currentTimeMillis() / 1000;
-		// 创建微博数据表
-		weiboJDBC.createSinaUserWeibosTable(tablename);
-		// 插入表名
-		weiboJDBC.insertTablename(SINA_USER_WEIBOS_TABLENAMES, tablename);
+		try {
+			// 创建存放表名表
+			weiboJDBC.createTablenamesTable(SINA_USER_WEIBOS_TABLENAMES);
+			// 创建微博数据表
+			weiboJDBC.createSinaUserWeibosTable(tablename);
+			// 插入表名
+			weiboJDBC.insertTablename(SINA_USER_WEIBOS_TABLENAMES, tablename);
+		} catch (SQLException e) {
+			logger.error("SQLException: " + e.getMessage() + " at line=69.");
+			throw new RuntimeException(e);
+		}
 
 		int count = 0;
-		for (int i = 0; i < 10_0000_0000; i++) {
+		for (int i = 0; i < 20_0000_0000; i++) {
 			count++;
 			/**
 			 * 检查是否更换微博数据表
 			 */
-			if (count % 1_0000 == 0) {
+			if (count % 1_000 == 0) {
 				logger.info("Read at: " + count);
-				// 查看微博数据表最大值
-				int max = weiboJDBC.getMaxId(tablename);
-				if (max > 1000_0000) {
-					// 获取表名
-					tablename = SINA_USER_WEIBOS + System.currentTimeMillis() / 1000;
-					// 创建微博数据表
-					weiboJDBC.createSinaUserWeibosTable(tablename);
-					// 插入表名
-					weiboJDBC.insertTablename(SINA_USER_WEIBOS_TABLENAMES, tablename);
+				try {
+					// 查看微博数据表最大值
+					int max = weiboJDBC.getMaxId(tablename);
+					if (max > 1000_0000) {
+						// 获取表名
+						tablename = SINA_USER_WEIBOS + System.currentTimeMillis() / 1000;
+						// 创建微博数据表
+						weiboJDBC.createSinaUserWeibosTable(tablename);
+						// 插入表名
+						weiboJDBC.insertTablename(SINA_USER_WEIBOS_TABLENAMES, tablename);
+					}
+				} catch (SQLException e) {
+					logger.error("SQLException: " + e.getMessage() + " at line=93.");
+					throw new RuntimeException(e);
 				}
 			}
 			StatusWapper publicWeibos = sinaWeiboInfoDao.getPublicWeibos();
@@ -91,19 +99,23 @@ public class SingleThreadPublicWeibos {
 				continue;
 			}
 			for (Status weibo : publicWeibos.getStatuses()) {
-				Boolean flag = weiboJDBC.isExistingWeibo(tablename, Long.parseLong(weibo.getId()));
-				if (!flag) {
-					try {
-						weiboJDBC.insertSinaUserWeibo(tablename, weibo, true);
-					} catch (SQLException e) {
-						weiboJDBC.insertSinaUserWeibo(tablename, weibo, false);
+				try {
+					Boolean flag = weiboJDBC.isExistingWeibo(tablename, Long.parseLong(weibo.getId()));
+					if (!flag) {
+						try {
+							weiboJDBC.insertSinaUserWeibo(tablename, weibo, true);
+						} catch (SQLException e) {
+							weiboJDBC.insertSinaUserWeibo(tablename, weibo, false);
+						}
 					}
+				} catch (SQLException e) {
+					logger.error("SQLException: " + e.getMessage() + " at line=113.");
+					throw new RuntimeException(e);
 				}
 			}
 		}
 
-		//		Thread.sleep(50 * 1000);
-		//		weiboJDBC.dbClose();
+		weiboJDBC.dbClose();
 	}
 
 }
