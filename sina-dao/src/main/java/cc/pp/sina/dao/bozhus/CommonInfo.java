@@ -28,7 +28,7 @@ public class CommonInfo {
 	 */
 	public BozhuBaseInfo getBozhuBaseInfo(long uid) {
 		BaseInfoParams params = new BaseInfoParams(SINA_USER_BASEINFO_TABLE + uid % 32, uid);
-		try (SqlSession session = MybatisConfig.getSqlSessionFactory(MybatisConfig.ServerEnum.beijing).openSession();) {
+		try (SqlSession session = MybatisConfig.getSqlSessionFactory(MybatisConfig.ServerEnum.fenxi).openSession();) {
 			CommonInfoDao bozhuFansDao = session.getMapper(CommonInfoDao.class);
 			return bozhuFansDao.getUserBaseInfo(params);
 		}
@@ -38,7 +38,7 @@ public class CommonInfo {
 	 * 获取用户的粉丝Uid列表
 	 */
 	public SimpleFansInfo getFansUids(long uid) {
-		try (SqlSession session = MybatisConfig.getSqlSessionFactory(MybatisConfig.ServerEnum.beijing).openSession();) {
+		try (SqlSession session = MybatisConfig.getSqlSessionFactory(MybatisConfig.ServerEnum.fenxi).openSession();) {
 			CommonInfoDao bozhuFansDao = session.getMapper(CommonInfoDao.class);
 			return bozhuFansDao.getFansByUid(uid);
 		}
@@ -49,7 +49,7 @@ public class CommonInfo {
 	 */
 	public UserExtendInfo getExtendInfo(long uid) {
 		ExtendSelectParams extendSelectParams = new ExtendSelectParams(SINA_USER_EXTEND_INFO + uid % 10, uid);
-		try (SqlSession sqlSession = MybatisConfig.getSqlSessionFactory(MybatisConfig.ServerEnum.beijing).openSession();) {
+		try (SqlSession sqlSession = MybatisConfig.getSqlSessionFactory(MybatisConfig.ServerEnum.fenxi).openSession();) {
 			CommonInfoDao commonInfoDao = sqlSession.getMapper(CommonInfoDao.class);
 			return commonInfoDao.getExtendInfo(extendSelectParams);
 		}

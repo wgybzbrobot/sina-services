@@ -1,13 +1,13 @@
 package cc.pp.sina.web.resource;
 
+import cc.pp.sina.domain.bozhus.BozhuPrice;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
-import cc.pp.sina.dao.bozhus.PriceService;
-import cc.pp.sina.domain.bozhus.Bozhu;
+import cc.pp.sina.dao.price.PriceService;
 import cc.pp.sina.domain.bozhus.price.PriceSource;
 import cc.pp.sina.web.application.CommonInfoApplication;
-import cc.pp.sina.web.bozhu.BozhuService;
+import cc.pp.sina.dao.price.BozhuService;
 
 /**
  * Created by chenwei on 14-1-15.
@@ -15,7 +15,7 @@ import cc.pp.sina.web.bozhu.BozhuService;
 public class PriceResource extends ServerResource {
 
 	private PriceService priceService;
-	private Bozhu bozhu;
+	private BozhuPrice bozhuPrice;
 
 	@Override
 	public void doInit() {
@@ -23,13 +23,13 @@ public class PriceResource extends ServerResource {
 		priceService = application.getPriceService();
 		BozhuService bozhuService = application.getBozhuService();
 		long uid = Long.valueOf((String) this.getRequest().getAttributes().get("uid"));
-		bozhu = bozhuService.get(uid);
-		setExisting(bozhu != null);
+		bozhuPrice = bozhuService.get(uid);
+		setExisting(bozhuPrice != null);
 	}
 
 	@Get("json")
 	public PriceSource getDefualtPrice() {
-		return priceService.getDefaultPriceSource(bozhu);
+		return priceService.getDefaultPriceSource(bozhuPrice);
 	}
 
 }

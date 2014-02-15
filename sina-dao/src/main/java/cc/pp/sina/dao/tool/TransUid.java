@@ -15,7 +15,7 @@ public class TransUid {
 	private static SqlSessionFactory sqlSessionFactory;
 
 	static {
-		sqlSessionFactory = MybatisConfig.getSqlSessionFactory(MybatisConfig.ServerEnum.wuhu);
+		sqlSessionFactory = MybatisConfig.getSqlSessionFactory(MybatisConfig.ServerEnum.fenxi);
 	}
 
 	/**

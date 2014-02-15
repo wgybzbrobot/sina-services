@@ -1,5 +1,7 @@
 package cc.pp.sina.web.server;
 
+import cc.pp.sina.web.driver.SinaWebDriver;
+
 import java.io.IOException;
 
 /**
@@ -8,6 +10,7 @@ import java.io.IOException;
 public class CommonInfoServerExample {
 
 	public static void main(String[] args) throws IOException {
+		System.setProperty("org.restlet.engine.loggerFacadeClass", "org.restlet.ext.slf4j.Slf4jLoggerFacade");
 		CommonInfoServer server = new CommonInfoServer();
 		server.start();
 		System.in.read();

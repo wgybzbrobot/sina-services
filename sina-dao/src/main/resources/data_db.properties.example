@@ -3,16 +3,6 @@ db_url_local=jdbc:mysql://127.0.0.1:3306/pp_fenxi
 db_username_local=root
 db_password_local=root
 
-# db params of wuhu's server
-db_url_wuhu=jdbc:mysql://192.168.1.48:3306/pp_fenxi
-db_username_wuhu=pp_fenxi
-db_password_wuhu=q#tmuYzC@sqB6!ok@sHd
-
-# db params of beijing's server
-db_url_beijing=jdbc:mysql://192.168.1.5:3306/pp_fenxi
-db_username_beijing=pp_fenxi
-db_password_beijing=q#tmuYzC@sqB6!ok@sHd
-
 # db params of tongling's server
 db_url_tongling=jdbc:mysql://localhost:3306/pp_fenxi
 db_username_tongling=pp_fenxi
@@ -42,8 +32,13 @@ db_url_write=jdbc:mysql://192.168.1.6:3306/pp_fenxi
 db_username_write=pp_fenxi
 db_password_write=Gd3am#nB0kiSbiN!o@4KQ
 
-# db params of price, 
+# db params of fenxi server
+fenxi.db.url=jdbc:mysql://localhost:3306/pp_fenxi
+fenxi.db.username=integration
+fenxi.db.password=
+
+# db params of price,
 # Note: these should be revised
-bozhu.price.db.url=jdbc:mysql://192.168.1.48:3306/pp_fenxi
-bozhu.price.db.username=pp_fenxi
-bozhu.price.db.password=q#tmuYzC@sqB6!ok@sHd
+bozhu.price.db.url=jdbc:mysql://localhost:3306/pp_fenxi
+bozhu.price.db.username=integration
+bozhu.price.db.password=

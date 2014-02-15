@@ -17,6 +17,7 @@ import cc.pp.datacenter.bozhudao.BozhuDbConnection;
 import cc.pp.datacenter.bozhudao.BozhuDetail;
 import cc.pp.datacenter.bozhudao.BozhuNotFoundException;
 import cc.pp.sina.dao.bozhus.BozhuLibrary;
+import cc.pp.sina.dao.common.MybatisConfig;
 import cc.pp.sina.dao.users.SinaUsers;
 import cc.pp.sina.domain.bozhus.UserAllParamsDomain;
 import cc.pp.sina.domain.users.UserInfo;
@@ -55,6 +56,9 @@ public class IndexBozhuLibraryMain {
 
 		BozhuDbConnection.connectDb(DB_URL, DB_USERNAME, DB_PASSWORD);
 		BozhuDao dao = new BozhuDao();
+
+		SinaUsers sinaUsers = new SinaUsers(MybatisConfig.ServerEnum.fenxi);
+
 		int count = 0;
 		List<UserAllParamsDomain> bozhus = new ArrayList<>();
 		for (long uid : uids) {
@@ -63,7 +67,7 @@ public class IndexBozhuLibraryMain {
 				indexBozhus.addDocsToSolr(bozhus);
 				bozhus = new ArrayList<>();
 			}
-			UserInfo baseInfo = SinaUsers.getSinaUserInfo("sinauserbaseinfo_" + uid % 32, uid);
+			UserInfo baseInfo = sinaUsers.getSinaUserInfo("sinauserbaseinfo_" + uid % 32, uid);
 			BozhuDetail detail = null;
 			try {
 				detail = dao.getBozhuDetail(uid);

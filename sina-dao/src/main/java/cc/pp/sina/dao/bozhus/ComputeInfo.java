@@ -10,7 +10,7 @@ public class ComputeInfo {
 	 * 新浪用户粉丝分析结果数据
 	 */
 	public String getFansAnalysisResult(long uid) {
-		try (SqlSession sqlSession = MybatisConfig.getSqlSessionFactory(MybatisConfig.ServerEnum.beijing).openSession();) {
+		try (SqlSession sqlSession = MybatisConfig.getSqlSessionFactory(MybatisConfig.ServerEnum.fenxi).openSession();) {
 			ComputeInfoDao computeResultDao = sqlSession.getMapper(ComputeInfoDao.class);
 			return computeResultDao.getFansAnalysisResult(uid);
 		}

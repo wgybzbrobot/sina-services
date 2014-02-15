@@ -97,10 +97,10 @@ public class TokenService {
 	}
 
 	private void refresh() {
-		logger.info("TokenService refresh...");
+		logger.debug("TokenService refresh...");
 		long start = System.currentTimeMillis();
 		sinaTokens = tokenJDBC.getRandom(10000);
-		logger.info("refresh result: tokenCount={}, execTime={}", sinaTokens.size(), System.currentTimeMillis() - start);
+		logger.debug("refresh result: tokenCount={}, execTime={}", sinaTokens.size(), System.currentTimeMillis() - start);
 	}
 
 }

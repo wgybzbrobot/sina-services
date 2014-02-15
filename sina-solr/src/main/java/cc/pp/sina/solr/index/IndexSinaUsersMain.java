@@ -9,6 +9,7 @@ import org.apache.solr.client.solrj.impl.CloudSolrServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cc.pp.sina.dao.common.MybatisConfig;
 import cc.pp.sina.dao.users.SinaUsers;
 import cc.pp.sina.domain.users.UserInfo;
 import cc.pp.sina.utils.threads.pool.ApplyThreadPool;
@@ -23,7 +24,7 @@ public class IndexSinaUsersMain {
 	private static Logger logger = LoggerFactory.getLogger(IndexSinaUsersMain.class);
 
 	private static final String SINA_USER_BASEINFO = "sinauserbaseinfo_";
-	private static final int FETCH_SIZE = 10_0000;
+	private static final int FETCH_SIZE = 10000;
 
 	private static final String ZOOKEEPER_CLOUD = "wuhu001:2181,wuhu005:2181,wuhu009:2181,wuhu013:2181,wuhu017:2181";
 	private static final String COLLECTION_NAME = "sina_users";
@@ -55,19 +56,21 @@ public class IndexSinaUsersMain {
 
 		IndexSinaUsersMain indexUsers = new IndexSinaUsersMain();
 
+		SinaUsers sinaUsers = new SinaUsers(MybatisConfig.ServerEnum.fenxi);
+
 		for (int t = 0; t < 32; t++) {
 			String tablename = SINA_USER_BASEINFO + t;
 			logger.info("Read table: " + tablename);
-			int maxBid = SinaUsers.getMaxBid(tablename);
+			int maxBid = sinaUsers.getMaxBid(tablename);
 			List<UserInfo> users = null;
 			for (int i = 0; i < maxBid / FETCH_SIZE; i++) {
-				users = SinaUsers.getSinaUserInfos(tablename, i * FETCH_SIZE + 1, (i + 1) * FETCH_SIZE);
+				users = sinaUsers.getSinaUserInfos(tablename, i * FETCH_SIZE + 1, (i + 1) * FETCH_SIZE);
 				logger.info("Read table: " + tablename + ", at: " + i + ",size=" + users.size());
 				if (!pool.isShutdown()) {
 					pool.execute(new IndexSinaUsersRun(indexUsers.getCloudServer(), users));
 				}
 			}
-			users = SinaUsers.getSinaUserInfos(tablename, (maxBid / FETCH_SIZE) * FETCH_SIZE + 1, maxBid);
+			users = sinaUsers.getSinaUserInfos(tablename, (maxBid / FETCH_SIZE) * FETCH_SIZE + 1, maxBid);
 			logger.info("Read table: " + tablename + ", at: " + maxBid / FETCH_SIZE + ",size=" + users.size());
 			if (!pool.isShutdown()) {
 				pool.execute(new IndexSinaUsersRun(indexUsers.getCloudServer(), users));

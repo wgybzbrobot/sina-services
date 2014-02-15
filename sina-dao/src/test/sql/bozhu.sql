@@ -70,22 +70,23 @@ CREATE TABLE IF NOT EXISTS `bozhu_price` (
   `sourceid` int(10) unsigned NOT NULL COMMENT 'bz_price_source表ID',
   `typeid` tinyint(2) unsigned NOT NULL COMMENT '价格类型，1=软广转发；2=软广直发；3=硬广转发；4=硬广直发；5=带号(@)价',
   `price` decimal(10,2) unsigned NOT NULL COMMENT '价格',
+  `update_time` datetime NOT NULL,
   UNIQUE KEY `username_sourceid_typeid_unique` (`username`,`sourceid`,`typeid`),
   KEY `sourceid` (`sourceid`),
   KEY `typeid` (`typeid`),
   KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微博账号报价、分析价表';
 
-INSERT INTO `bozhu_price` (`username`, `sourceid`, `typeid`, `price`) VALUES
-	(1699668020, 1, 1, 5.00),
-	(1699668020, 1, 2, 5.00),
-	(1699668020, 2, 1, 5.00),
-	(1772605247, 1, 1, 5.00),
-	(1772605247, 1, 2, 5.00),
-	(1772605247, 1, 3, 5.00),
-	(1772605247, 1, 4, 5.00),
-	(1772605247, 2, 1, 5.00),
-	(1772605247, 2, 3, 5.00);
+INSERT INTO `bozhu_price` (`username`, `sourceid`, `typeid`, `price`, `update_time`) VALUES
+	(1699668020, 1, 1, 5.00, '2013-10-12 01:02:03'),
+	(1699668020, 1, 2, 5.00, '2013-10-12 01:02:03'),
+	(1699668020, 2, 1, 5.00, '2013-10-12 01:02:03'),
+	(1772605247, 1, 1, 5.00, '2013-10-12 01:02:03'),
+	(1772605247, 1, 2, 5.00, '2013-10-12 01:02:03'),
+	(1772605247, 1, 3, 5.00, '2013-10-12 01:02:03'),
+	(1772605247, 1, 4, 5.00, '2013-10-12 01:02:03'),
+	(1772605247, 2, 1, 5.00, '2013-10-12 01:02:03'),
+	(1772605247, 2, 3, 5.00, '2013-10-12 01:02:03');
 
 -- --------------------------------------------------------
 

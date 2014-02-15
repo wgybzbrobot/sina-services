@@ -1,5 +1,6 @@
 package cc.pp.sina.dao.demo;
 
+import cc.pp.sina.dao.common.MybatisConfig;
 import cc.pp.sina.dao.users.SinaUsers;
 
 import com.sina.weibo.model.WeiboException;
@@ -21,7 +22,8 @@ public class SinaUsersDemo {
 		//		User user = users.showUserById("1001318521", "2.00lb_yKCdcZIJC4bd5178db43QmLQE");
 		//		SinaUsers.insertSinaUserInfo("sinauserbaseinfo_test1", user);
 		//		SinaUsers.updateSinaUserInfo("sinauserbaseinfo_test1", 1001318521L);
-		SinaUsers.deleteSinaUserInfo("sinauserbaseinfo_test1", 1001318521L);
+		SinaUsers sinaUsers = new SinaUsers(MybatisConfig.ServerEnum.local);
+		sinaUsers.deleteSinaUserInfo("sinauserbaseinfo_test1", 1001318521L);
 
 	}
 

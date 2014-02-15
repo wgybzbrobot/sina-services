@@ -7,16 +7,16 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
-import cc.pp.sina.dao.bozhus.PriceService;
-import cc.pp.sina.domain.bozhus.Bozhu;
+import cc.pp.sina.dao.price.PriceService;
+import cc.pp.sina.domain.bozhus.BozhuPrice;
 import cc.pp.sina.domain.bozhus.price.PriceSource;
 import cc.pp.sina.web.application.CommonInfoApplication;
-import cc.pp.sina.web.bozhu.BozhuService;
+import cc.pp.sina.dao.price.BozhuService;
 
 public class PriceSourcesResource extends ServerResource {
 
 	private PriceService priceService;
-	private Bozhu bozhu;
+	private BozhuPrice bozhuPrice;
 
 	@Override
 	public void doInit() {
@@ -24,18 +24,18 @@ public class PriceSourcesResource extends ServerResource {
 		priceService = application.getPriceService();
 		BozhuService bozhuService = application.getBozhuService();
 		long uid = Long.valueOf((String) this.getRequest().getAttributes().get("uid"));
-		bozhu = bozhuService.get(uid);
-		setExisting(bozhu != null);
+		bozhuPrice = bozhuService.get(uid);
+		setExisting(bozhuPrice != null);
 	}
 
 	@Get("json")
 	public Collection<PriceSource> list() {
-		return priceService.getSourcePrices(bozhu);
+		return priceService.getSourcePrices(bozhuPrice);
 	}
 
 	@Post("json")
 	public PriceSource addSource(PriceSource source) {
-		PriceSource result = priceService.addSource(bozhu, source);
+		PriceSource result = priceService.addSource(bozhuPrice, source);
 		setStatus(Status.SUCCESS_CREATED);
 		return result;
 	}

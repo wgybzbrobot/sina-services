@@ -1,57 +1,55 @@
 package cc.pp.sina.domain.bozhus;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+/**
+ * Created by chenwei on 14-1-15.
+ */
 public class BozhuPrice {
 
-	private final String source;
-	private final String type;
-	private final String price;
+	private Long username;
+	private String ptype;
+	@JsonIgnore
+	private Integer defaultPriceSource;
 
-	public BozhuPrice(Builder builder) {
-		this.source = builder.source;
-		this.type = builder.type;
-		this.price = builder.price;
+	public Integer getDefaultPriceSource() {
+		return defaultPriceSource;
 	}
 
-	public static class Builder {
-
-		private String source;
-		private String type;
-		private String price;
-
-		public Builder() {
-			//
-		}
-
-		public Builder setSource(String source) {
-			this.source = source;
-			return this;
-		}
-
-		public Builder setType(String type) {
-			this.type = type;
-			return this;
-		}
-
-		public Builder setPrice(String price) {
-			this.price = price;
-			return this;
-		}
-
-		public BozhuPrice build() {
-			return new BozhuPrice(this);
-		}
+	public void setDefaultPriceSource(Integer defaultPriceSource) {
+		this.defaultPriceSource = defaultPriceSource;
 	}
 
-	public String getSource() {
-		return source;
+	public BozhuPrice() {
 	}
 
-	public String getType() {
-		return type;
+	public BozhuPrice(long username, String ptype) {
+		this.username = username;
+		this.ptype = ptype;
 	}
 
-	public String getPrice() {
-		return price;
+	public String getPtype() {
+		return ptype;
 	}
 
+	public Long getUsername() {
+		return username;
+	}
+
+	public void setPtype(String ptype) {
+		this.ptype = ptype;
+	}
+
+	public void setUsername(Long username) {
+		this.username = username;
+	}
+
+	@Override
+	public String toString() {
+		return "BozhuPrice{" +
+				"username=" + username +
+				", ptype='" + ptype + '\'' +
+				", defaultPriceSource=" + defaultPriceSource +
+				'}';
+	}
 }

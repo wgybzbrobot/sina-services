@@ -21,21 +21,22 @@ public class BaseSolrDemo {
 	 */
 	public static void main(String[] args) throws SolrServerException, IOException {
 
-		String str = "aaaabbb";
-		System.out.println(str.replaceAll("_", ""));
+		addDocsToCloudSolr();
 
 	}
 
 	/**
 	 * 添加索引到CloudSolr中
 	 */
-	public void addDocsToCloudSolr() throws SolrServerException, IOException {
+	public static void addDocsToCloudSolr() throws SolrServerException, IOException {
 
 		CloudSolrServer server = new CloudSolrServer("ppcc2:2181,ppcc3:2181");
 		server.setDefaultCollection("sina_users");
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.addField("id", "12345");
 		doc.addField("name", "A lovely summer holiday test");
+		doc.addField("description", "test test test");
+		doc.addField("friends", "12233,1455366");
 		server.add(doc);
 		server.commit();
 

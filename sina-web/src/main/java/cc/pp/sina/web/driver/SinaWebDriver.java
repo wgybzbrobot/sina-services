@@ -29,7 +29,7 @@ public class SinaWebDriver {
 			System.err.println("Usage: Driver <class-name>");
 			System.exit(-1);
 		}
-
+		System.setProperty("org.restlet.engine.loggerFacadeClass", "org.restlet.ext.slf4j.Slf4jLoggerFacade");
 		String[] leftArgs = new String[args.length - 1];
 		System.arraycopy(args, 1, leftArgs, 0, leftArgs.length);
 

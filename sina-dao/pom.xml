@@ -28,6 +28,12 @@
 			<artifactId>weibo4j-oauth2</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpasyncclient</artifactId>
+			<version>4.0-beta4</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>
 		</dependency>
@@ -105,7 +111,7 @@
 					<password></password>
 				</configuration>
 				<executions>
-					<!-- 测试前创建e_test库 -->
+					<!-- 测试前创建test库 -->
 					<execution>
 						<id>bozhu</id>
 						<phase>process-test-resources</phase>

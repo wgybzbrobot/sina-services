@@ -12,7 +12,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 public class MybatisConfig {
 
 	public enum ServerEnum {
-		local, wuhu, beijing, tongling, pp, read, write, friend1, friend2, other
+		local, fenxi, tongling, pp, read, write, friend1, friend2, other
 	}
 
 	private static Map<ServerEnum, SqlSessionFactory> sessionFactorys = new HashMap<>();

@@ -3,28 +3,18 @@ package cc.pp.sina.web.application;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.pp.sina.web.resource.*;
 import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
 import cc.pp.sina.dao.bozhus.CommonInfo;
-import cc.pp.sina.dao.bozhus.PriceService;
+import cc.pp.sina.dao.price.PriceService;
 import cc.pp.sina.domain.bozhus.BozhuBaseInfo;
 import cc.pp.sina.domain.bozhus.SimpleFansInfo;
 import cc.pp.sina.domain.bozhus.UserExtendInfo;
-import cc.pp.sina.web.bozhu.BozhuService;
-import cc.pp.sina.web.bozhu.BozhuServiceDb;
-import cc.pp.sina.web.resource.BaseInfoResource;
-import cc.pp.sina.web.resource.BatchBaseInfoResource;
-import cc.pp.sina.web.resource.ExtendResource;
-import cc.pp.sina.web.resource.FansIdsResource;
-import cc.pp.sina.web.resource.FansInfosResource;
-import cc.pp.sina.web.resource.PriceResource;
-import cc.pp.sina.web.resource.PriceSourceDefaultResource;
-import cc.pp.sina.web.resource.PriceSourceResource;
-import cc.pp.sina.web.resource.PriceSourcesResource;
-import cc.pp.sina.web.resource.PriceTypesResource;
-import cc.pp.sina.web.resource.WeiboResource;
+import cc.pp.sina.dao.price.BozhuService;
+import cc.pp.sina.dao.price.BozhuServiceDb;
 
 /**
  * 待废弃
@@ -57,6 +47,7 @@ public class CommonInfoApplication extends Application {
 		router.attach("/users/{uid}/price/sources/{sourceId}", PriceSourceResource.class);
 		router.attach("/users/{uid}/price/sources/{sourceId}/default", PriceSourceDefaultResource.class);
 		router.attach("/users/{uid}/price/sources/{sourceId}/types", PriceTypesResource.class);
+		router.attach("/weibos", WeibosResource.class);
 		router.attach("/weibos/{wid}", WeiboResource.class);
 		return router;
 	}

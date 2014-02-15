@@ -306,7 +306,8 @@ public class WeiboJDBC {
 				+ "`source` varchar(30) NOT NULL COMMENT '微博来源',"
 				+ "`visible` varchar(30) NOT NULL COMMENT '微博的可见性及指定可见分组信息',"
 				+ "`mlevel` smallint(8) unsigned NOT NULL COMMENT '微博等级',"
-				+ "`lasttime` int(10) unsigned NOT NULL COMMENT '采集时间'," + "PRIMARY KEY (`id`),KEY `wid` (`wid`)) "
+				+ "`lasttime` int(10) unsigned NOT NULL COMMENT '采集时间',"
+				+ "PRIMARY KEY (`id`),KEY `wid` (`wid`),KEY `username` (`username`),KEY `owid` (`owid`),KEY `ousername` (`ousername`)) "
 				+ "ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='新浪的用户微博信息' AUTO_INCREMENT=1 ;";
 		try (Connection conn = getConnection(); Statement statement = conn.createStatement();) {
 			statement.execute(sql);

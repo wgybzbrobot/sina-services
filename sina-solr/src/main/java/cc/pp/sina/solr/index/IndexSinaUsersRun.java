@@ -9,11 +9,21 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrServer;
 import org.apache.solr.common.SolrInputDocument;
 
+import cc.pp.sina.dao.common.MybatisConfig;
+import cc.pp.sina.dao.friends.SinaFriendsDis;
+import cc.pp.sina.domain.friends.FriendsInfo;
 import cc.pp.sina.domain.users.UserInfo;
 
 public class IndexSinaUsersRun implements Runnable {
 
 	//	private static Logger logger = LoggerFactory.getLogger(IndexSinaUsers.class);
+
+	/**
+	 * 新浪用户关注数据获取
+	 */
+	private static final String SINA_USER_FRIENDS = "sina_user_friends_";
+	private static SinaFriendsDis sinaFriends1 = new SinaFriendsDis(MybatisConfig.ServerEnum.friend1);
+	private static SinaFriendsDis sinaFriends2 = new SinaFriendsDis(MybatisConfig.ServerEnum.friend2);
 
 	private final CloudSolrServer cloudServer;
 	private final List<UserInfo> users;
@@ -71,7 +81,18 @@ public class IndexSinaUsersRun implements Runnable {
 		/**
 		 * 注意：friends字段数据要和上面所有字段一起添加
 		 */
-		//		doc.addField("friends", "");
+		long username = user.getId();
+		FriendsInfo friendsInfo = null;
+		if (username % 64 < 32) {
+			friendsInfo = sinaFriends1.getSinaFriendsInfo(SINA_USER_FRIENDS + username % 64, username);
+		} else {
+			friendsInfo = sinaFriends2.getSinaFriendsInfo(SINA_USER_FRIENDS + username % 64, username);
+		}
+		if (friendsInfo != null) {
+			doc.addField("friends", friendsInfo.getFriendsuids());
+		} else {
+			doc.addField("friends", "");
+		}
 
 		return doc;
 	}

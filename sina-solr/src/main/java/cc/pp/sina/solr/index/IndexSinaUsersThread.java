@@ -12,12 +12,22 @@ import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cc.pp.sina.dao.common.MybatisConfig;
+import cc.pp.sina.dao.friends.SinaFriendsDis;
 import cc.pp.sina.dao.users.SinaUsers;
+import cc.pp.sina.domain.friends.FriendsInfo;
 import cc.pp.sina.domain.users.UserInfo;
 
 public class IndexSinaUsersThread {
 
 	private static Logger logger = LoggerFactory.getLogger(IndexSinaUsersThread.class);
+
+	/**
+	 * 新浪用户关注数据获取
+	 */
+	private static final String SINA_USER_FRIENDS = "sina_user_friends_";
+	private static SinaFriendsDis sinaFriends1 = new SinaFriendsDis(MybatisConfig.ServerEnum.friend1);
+	private static SinaFriendsDis sinaFriends2 = new SinaFriendsDis(MybatisConfig.ServerEnum.friend2);
 
 	private static final String SINA_USER_BASEINFO = "sinauserbaseinfo_";
 	private static final int FETCH_SIZE = 1_0000;
@@ -43,17 +53,19 @@ public class IndexSinaUsersThread {
 
 		IndexSinaUsersThread indexUsers = new IndexSinaUsersThread();
 
+		SinaUsers sinaUsers = new SinaUsers(MybatisConfig.ServerEnum.fenxi);
+
 		for (int t = 0; t < 32; t++) {
 			String tablename = SINA_USER_BASEINFO + t;
 			logger.info("Read table: " + tablename);
-			int maxBid = SinaUsers.getMaxBid(tablename);
+			int maxBid = sinaUsers.getMaxBid(tablename);
 			List<UserInfo> users = null;
 			for (int i = 0; i < maxBid / FETCH_SIZE; i++) {
-				users = SinaUsers.getSinaUserInfos(tablename, i * FETCH_SIZE + 1, (i + 1) * FETCH_SIZE);
+				users = sinaUsers.getSinaUserInfos(tablename, i * FETCH_SIZE + 1, (i + 1) * FETCH_SIZE);
 				logger.info("Read table: " + tablename + ", at: " + i + ",size=" + users.size());
 				indexUsers.addDocsToSolr(users);
 			}
-			users = SinaUsers.getSinaUserInfos(tablename, (maxBid / FETCH_SIZE) * FETCH_SIZE + 1, maxBid);
+			users = sinaUsers.getSinaUserInfos(tablename, (maxBid / FETCH_SIZE) * FETCH_SIZE + 1, maxBid);
 			logger.info("Read table: " + tablename + ", at: " + maxBid / FETCH_SIZE + ",size=" + users.size());
 			indexUsers.addDocsToSolr(users);
 		}
@@ -109,7 +121,18 @@ public class IndexSinaUsersThread {
 		/**
 		 * 注意：friends字段数据要和上面所有字段一起添加
 		 */
-		//		doc.addField("friends", "");
+		long username = user.getId();
+		FriendsInfo friendsInfo = null;
+		if (username % 64 < 32) {
+			friendsInfo = sinaFriends1.getSinaFriendsInfo(SINA_USER_FRIENDS + username % 64, username);
+		} else {
+			friendsInfo = sinaFriends2.getSinaFriendsInfo(SINA_USER_FRIENDS + username % 64, username);
+		}
+		if (friendsInfo != null) {
+			doc.addField("friends", friendsInfo.getFriendsuids());
+		} else {
+			doc.addField("friends", "");
+		}
 
 		return doc;
 	}

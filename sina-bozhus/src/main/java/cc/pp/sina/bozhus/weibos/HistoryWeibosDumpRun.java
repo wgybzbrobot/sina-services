@@ -76,7 +76,8 @@ public class HistoryWeibosDumpRun implements Runnable {
 				}
 			}
 		} catch (RuntimeException e) {
-			logger.info("User: " + uid + "'s weibos has RuntimeException: " + e.getMessage());
+			throw new RuntimeException(e);
+//			logger.info("User: " + uid + "'s weibos has RuntimeException: " + e.getMessage());
 		}
 
 	}

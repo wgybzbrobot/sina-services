@@ -7,6 +7,7 @@ import cc.pp.sina.solr.demo.Demo;
 import cc.pp.sina.solr.index.IndexBozhuLibraryMain;
 import cc.pp.sina.solr.index.IndexPPUsersMain;
 import cc.pp.sina.solr.index.IndexSinaUsersMain;
+import cc.pp.sina.solr.index.IndexSinaUsersStandalone;
 import cc.pp.sina.solr.index.IndexSinaUsersThread;
 import cc.pp.sina.solr.index.IndexSinaWeibosThread;
 
@@ -52,6 +53,11 @@ public class SinaSolrDriver {
 		case "indexBozhuLibraryMain":
 			logger.info("单线程索引博主库博主数据： ");
 			IndexBozhuLibraryMain.main(leftArgs);
+			break;
+		case "indexSinaUsersStandalone":
+			logger.info("单台机器建立数据索引：");
+			IndexSinaUsersStandalone.main(leftArgs);
+			break;
 		case "demo":
 			logger.info("测试： ");
 			Demo.main(leftArgs);

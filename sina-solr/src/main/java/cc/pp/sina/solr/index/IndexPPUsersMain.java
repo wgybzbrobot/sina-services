@@ -12,6 +12,7 @@ import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cc.pp.sina.dao.common.MybatisConfig;
 import cc.pp.sina.dao.pp.PPUsers;
 import cc.pp.sina.dao.users.SinaUsers;
 import cc.pp.sina.domain.users.UserInfo;
@@ -20,6 +21,8 @@ import cc.pp.sina.utils.threads.pool.ApplyThreadPool;
 public class IndexPPUsersMain {
 
 	private static Logger logger = LoggerFactory.getLogger(IndexPPUsersMain.class);
+
+	private static final SinaUsers sinaUsers = new SinaUsers(MybatisConfig.ServerEnum.fenxi);
 
 	private static final String SINA_USER_BASEINFO = "sinauserbaseinfo_";
 	private static final int FETCH_SIZE = 1_000;
@@ -99,7 +102,7 @@ public class IndexPPUsersMain {
 
 		@Override
 		public void run() {
-			UserInfo userInfo = SinaUsers.getSinaUserInfo(SINA_USER_BASEINFO + uid % 32, uid);
+			UserInfo userInfo = sinaUsers.getSinaUserInfo(SINA_USER_BASEINFO + uid % 32, uid);
 			if (userInfo != null) {
 				userInfo.setRemark("1");
 				indexPPUsers.addDocToSolr(userInfo);

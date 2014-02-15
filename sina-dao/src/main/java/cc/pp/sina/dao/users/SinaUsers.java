@@ -17,9 +17,9 @@ public class SinaUsers {
 
 	private static SqlSessionFactory sqlSessionFactory;
 
-	static {
+	public SinaUsers(MybatisConfig.ServerEnum server) {
 		try {
-			sqlSessionFactory = MybatisConfig.getSqlSessionFactory(MybatisConfig.ServerEnum.beijing);
+			sqlSessionFactory = MybatisConfig.getSqlSessionFactory(server);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -28,7 +28,7 @@ public class SinaUsers {
 	/**
 	 * 获取数据表中的最大bid
 	 */
-	public static int getMaxBid(String tablename) {
+	public int getMaxBid(String tablename) {
 		UsersSelectParams usersSelectParams = new UsersSelectParams(tablename, 0, 0);
 		try (SqlSession sqlSession = sqlSessionFactory.openSession();) {
 			SinaUsersDao sinaUsersDao = sqlSession.getMapper(SinaUsersDao.class);
@@ -39,7 +39,7 @@ public class SinaUsers {
 	/**
 	 * 获取新浪用户基础信息，批量查询
 	 */
-	public static List<UserInfo> getSinaUserInfos(String tablename, int low, int high) {
+	public List<UserInfo> getSinaUserInfos(String tablename, int low, int high) {
 		UsersSelectParams usersSelectParams = new UsersSelectParams(tablename, low, high);
 		try (SqlSession sqlSession = sqlSessionFactory.openSession();) {
 			SinaUsersDao sinaUsersDao = sqlSession.getMapper(SinaUsersDao.class);
@@ -50,7 +50,7 @@ public class SinaUsers {
 	/**
 	 * 获取新浪用户基础信息，单个查询
 	 */
-	public static UserInfo getSinaUserInfo(String tablename, long username) {
+	public UserInfo getSinaUserInfo(String tablename, long username) {
 		UserSelectParams userSelectParams = new UserSelectParams(tablename, username);
 		try (SqlSession sqlSession = sqlSessionFactory.openSession();) {
 			SinaUsersDao sinaUsersDao = sqlSession.getMapper(SinaUsersDao.class);
@@ -61,7 +61,7 @@ public class SinaUsers {
 	/**
 	 * 插入新浪用户基础信息
 	 */
-	public static void insertSinaUserInfo(String tablename, User user) {
+	public void insertSinaUserInfo(String tablename, User user) {
 		if (user.getRemark() == null) {
 			user.setRemark("");
 		}
@@ -86,7 +86,7 @@ public class SinaUsers {
 	/**
 	 * 删除新浪用户基础信息
 	 */
-	public static void deleteSinaUserInfo(String tablename, long username) {
+	public void deleteSinaUserInfo(String tablename, long username) {
 		UserSelectParams userSelectParams = new UserSelectParams(tablename, username);
 		try (SqlSession sqlSession = sqlSessionFactory.openSession();) {
 			SinaUsersDao sinaUsersDao = sqlSession.getMapper(SinaUsersDao.class);
@@ -97,7 +97,7 @@ public class SinaUsers {
 	/**
 	 * 更新新浪用户基础信息，更新不存在用户
 	 */
-	public static void updateSinaUserInfo(String tablename, long username) {
+	public void updateSinaUserInfo(String tablename, long username) {
 		UserSelectParams userSelectParams = new UserSelectParams(tablename, username);
 		try (SqlSession sqlSession = sqlSessionFactory.openSession();) {
 			SinaUsersDao sinaUsersDao = sqlSession.getMapper(SinaUsersDao.class);

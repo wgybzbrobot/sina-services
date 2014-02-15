@@ -14,7 +14,7 @@ public class StatusTest {
 
 	@Ignore
 	public void testShowBatch() {
-		Statuses statuses = Statuses.showBatch(new Long[] { 3657970825260207L, 3665123979923029L });
+		Statuses statuses = Statuses.showBatch(new long[] { 3657970825260207L, 3665123979923029L });
 		assertEquals(2, statuses.getTotal_number());
 		assertEquals("我的口罩到了", statuses.getStatuses().get(0).getText());
 	}

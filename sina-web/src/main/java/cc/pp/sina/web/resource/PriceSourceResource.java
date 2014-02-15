@@ -1,15 +1,15 @@
 package cc.pp.sina.web.resource;
 
+import cc.pp.sina.domain.bozhus.BozhuPrice;
 import org.restlet.data.Status;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
-import cc.pp.sina.dao.bozhus.PriceService;
-import cc.pp.sina.domain.bozhus.Bozhu;
+import cc.pp.sina.dao.price.PriceService;
 import cc.pp.sina.domain.bozhus.price.PriceSource;
 import cc.pp.sina.web.application.CommonInfoApplication;
-import cc.pp.sina.web.bozhu.BozhuService;
+import cc.pp.sina.dao.price.BozhuService;
 
 /**
  * User: chenwei@pp.cc
@@ -20,7 +20,7 @@ public class PriceSourceResource extends ServerResource {
 
 	private int sourceId;
 	private PriceService priceService;
-	private Bozhu bozhu;
+	private BozhuPrice bozhuPrice;
 
 	@Override
 	public void doInit() {
@@ -29,18 +29,18 @@ public class PriceSourceResource extends ServerResource {
 		CommonInfoApplication application = (CommonInfoApplication) getApplication();
 		priceService = application.getPriceService();
 		BozhuService bozhuService = application.getBozhuService();
-		bozhu = bozhuService.get(uid);
-		setExisting(bozhu != null);
+		bozhuPrice = bozhuService.get(uid);
+		setExisting(bozhuPrice != null);
 	}
 
 	@Get("json")
 	public PriceSource getSource() {
-		return priceService.getSource(bozhu, sourceId);
+		return priceService.getSource(bozhuPrice, sourceId);
 	}
 
 	@Delete
 	public void deleteSource() {
-		priceService.deleteSource(bozhu, sourceId);
+		priceService.deleteSource(bozhuPrice, sourceId);
 		setStatus(Status.SUCCESS_NO_CONTENT);
 	}
 

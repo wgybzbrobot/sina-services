@@ -18,7 +18,7 @@ public class BozhuLibrary {
 
 	static {
 		try {
-			sqlSessionFactory = MybatisConfig.getSqlSessionFactory(MybatisConfig.ServerEnum.beijing);
+			sqlSessionFactory = MybatisConfig.getSqlSessionFactory(MybatisConfig.ServerEnum.fenxi);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

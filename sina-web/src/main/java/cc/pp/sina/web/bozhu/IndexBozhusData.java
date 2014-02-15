@@ -12,6 +12,7 @@ import cc.pp.datacenter.bozhudao.BozhuDbConnection;
 import cc.pp.datacenter.bozhudao.BozhuDetail;
 import cc.pp.datacenter.bozhudao.BozhuNotFoundException;
 import cc.pp.sina.dao.bozhus.BozhuLibrary;
+import cc.pp.sina.dao.common.MybatisConfig;
 import cc.pp.sina.dao.users.SinaUsers;
 import cc.pp.sina.domain.bozhus.UserAllParamsDomain;
 import cc.pp.sina.domain.users.UserInfo;
@@ -39,6 +40,8 @@ public class IndexBozhusData {
 		List<Long> uids = BozhuLibrary.getBozhuUids();
 		logger.info("Uids' size=" + uids.size());
 
+		SinaUsers sinaUsers = new SinaUsers(MybatisConfig.ServerEnum.fenxi);
+
 		logger.info("循环索引每一个博主数据：");
 		try {
 			BozhuIndex bozhuIndex = new BozhuIndex(BozhuIndex.INDEX_DIR);
@@ -52,7 +55,7 @@ public class IndexBozhusData {
 					bozhuIndex.addIndexDatas(bozhus);
 					bozhus = new ArrayList<>();
 				}
-				UserInfo baseInfo = SinaUsers.getSinaUserInfo("sinauserbaseinfo_" + uid % 32, uid);
+				UserInfo baseInfo = sinaUsers.getSinaUserInfo("sinauserbaseinfo_" + uid % 32, uid);
 				BozhuDetail detail = null;
 				try {
 					detail = dao.getBozhuDetail(uid);

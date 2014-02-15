@@ -25,13 +25,13 @@ public class Statuses extends BaseSinaApi {
 		total_number = statuses.size();
 	}
 
-	public static Statuses showBatch(Long... ids) {
+	public static Statuses showBatch(long... ids) {
 		if (ids.length == 0) {
 			return empty;
 		}
 		final String resource = "/2/statuses/show_batch.json";
 		StringBuilder idsStr = new StringBuilder(ids.length * 17);
-		for (Long id : ids) {
+		for (long id : ids) {
 			idsStr.append(id).append(",");
 		}
 		idsStr.deleteCharAt(idsStr.length() - 1);

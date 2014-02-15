@@ -170,9 +170,6 @@
 				<artifactId>exec-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-
-		<finalName>sina-web</finalName>
-
 	</build>
 
 </project>
