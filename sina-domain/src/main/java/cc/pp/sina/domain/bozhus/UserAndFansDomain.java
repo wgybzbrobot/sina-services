@@ -27,6 +27,8 @@ public class UserAndFansDomain {
 	private final float fansexistedratio;
 	private final long allfanscount;
 	private final long allactivefanscount;
+	private final String fansage; // 35、粉丝年龄
+	private final String fanstags; // 36、粉丝标签
 
 	public UserAndFansDomain(Builder builder) {
 		this.username = builder.username;
@@ -47,6 +49,8 @@ public class UserAndFansDomain {
 		this.fansexistedratio = builder.fansexistedratio;
 		this.allfanscount = builder.allfanscount;
 		this.allactivefanscount = builder.allactivefanscount;
+		this.fansage = builder.fansage;
+		this.fanstags = builder.fanstags;
 	}
 
 	public static class Builder {
@@ -69,6 +73,8 @@ public class UserAndFansDomain {
 		private float fansexistedratio;
 		private long allfanscount;
 		private long allactivefanscount;
+		private String fansage = ""; // 35、粉丝年龄
+		private String fanstags = ""; // 36、粉丝标签
 
 		public Builder(String username) {
 			this.username = username;
@@ -159,6 +165,16 @@ public class UserAndFansDomain {
 			return this;
 		}
 
+		public Builder setFansage(String fansage) {
+			this.fansage = fansage;
+			return this;
+		}
+
+		public Builder setFanstags(String fanstags) {
+			this.fanstags = fanstags;
+			return this;
+		}
+
 		public UserAndFansDomain build() {
 			return new UserAndFansDomain(this);
 		}
@@ -234,6 +250,14 @@ public class UserAndFansDomain {
 
 	public long getAllactivefanscount() {
 		return allactivefanscount;
+	}
+
+	public String getFansage() {
+		return fansage;
+	}
+
+	public String getFanstags() {
+		return fanstags;
 	}
 
 }

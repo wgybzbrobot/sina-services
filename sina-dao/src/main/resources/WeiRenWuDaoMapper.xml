@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.pp.sina.dao.weirenwu.WeiRenWuDao">
+
+	<!-- 插入博主uid -->
+	<insert id="insertSinaBozhuUid" parameterType="string"
+		useGeneratedKeys="true" keyProperty="id" flushCache="true"
+		statementType="PREPARED">
+		INSERT `bozhu`
+		(`username`,`ptype`,`default_price_source`) VALUES
+		(#{username},"sina",1);
+	</insert>
+
+	<!-- 获取所有博主uid -->
+	<select id="selectAllSinaBozhuUids" resultType="string">
+		SELECT `username`
+		FROM `bozhu`;
+	</select>
+
+	<!-- 根据uid查找bzid -->
+	<select id="selectSinaBzid" parameterType="string" resultType="long">
+		SELECT `id` FROM `bozhu` WHERE `username` = #{username};
+	</select>
+
+	<!-- 插入博主计算数据 -->
+	<insert id="insertSinaBozhuExtendInfo" parameterType="BozhuExtendInfo"
+		useGeneratedKeys="true" keyProperty="id" flushCache="true"
+		statementType="PREPARED">
+		INSERT `bozhu_detail`
+		(`bzid`,`influence`,`active`,`wbnum`,`fannum`,`malerate`,`vrate`,`exsit_fan_rate`,`act_fan`
+		,`act_fan_rate`,`fan_fans`,`act_fan_fans`,`wb_avg_daily`,`wb_avg_repost_lastweek`,
+		`wb_avg_repost_lastmonth`,`wb_avg_repost`,`orig_wb_rate`,`orig_wb_avg_repost`,`wb_avg_valid_repost_lastweek`,
+		`wb_avg_valid_repost_lastmonth`,`rt_user_avg_quality`,`avg_valid_fan_cover_last100`,`identity_type`,
+		`industry_type`,`fans_age`,`fans_tags`,`top5provinces`,`wbsource`,`usertags`)
+		VALUES
+		(#{bzid},#{influence},#{active},#{wbnum},#{fannum},#{malerate},#{vrate},#{exsit_fan_rate},#{act_fan},
+		#{act_fan_rate},#{fan_fans},#{act_fan_fans},#{wb_avg_daily},#{wb_avg_repost_lastweek},
+		#{wb_avg_repost_lastmonth},#{wb_avg_repost},#{orig_wb_rate},#{orig_wb_avg_repost},#{wb_avg_valid_repost_lastweek},
+		#{wb_avg_valid_repost_lastmonth},#{rt_user_avg_quality},#{avg_valid_fan_cover_last100},#{identity_type},
+		#{industry_type},#{fans_age},#{fans_tags},#{top5provinces},#{wbsource},#{usertags});
+	</insert>
+
+	<!-- 获取博主计算数据，根据uid -->
+	<select id="selectSinaBozhuExtendInfo" parameterType="long"
+		resultType="BozhuExtendInfo">
+		SELECT
+		`bzid`,`influence`,`active`,`wbnum`,`fannum`,`malerate`,`vrate`,`exsit_fan_rate`,`act_fan`
+		,`act_fan_rate`,`fan_fans`,`act_fan_fans`,`wb_avg_daily`,`wb_avg_repost_lastweek`,
+		`wb_avg_repost_lastmonth`,`wb_avg_repost`,`orig_wb_rate`,`orig_wb_avg_repost`,`wb_avg_valid_repost_lastweek`,
+		`wb_avg_valid_repost_lastmonth`,`rt_user_avg_quality`,`avg_valid_fan_cover_last100`,`identity_type`,
+		`industry_type`,`fans_age`,`fans_tags`,`top5provinces`,`wbsource`,`usertags`
+		FROM `bozhu_detail` WHERE `bzid` = #{bzid};
+	</select>
+
+	<!-- 获取博主计算数据，根据bzid范围 -->
+	<select id="selectSinaBozhuExtendInfos" parameterType="SelectBozhuParams"
+		resultType="BozhuExtendInfo">
+		SELECT
+		`bzid`,`influence`,`active`,`wbnum`,`fannum`,`malerate`,`vrate`,`exsit_fan_rate`,`act_fan`
+		,`act_fan_rate`,`fan_fans`,`act_fan_fans`,`wb_avg_daily`,`wb_avg_repost_lastweek`,
+		`wb_avg_repost_lastmonth`,`wb_avg_repost`,`orig_wb_rate`,`orig_wb_avg_repost`,`wb_avg_valid_repost_lastweek`,
+		`wb_avg_valid_repost_lastmonth`,`rt_user_avg_quality`,`avg_valid_fan_cover_last100`,`identity_type`,
+		`industry_type`,`fans_age`,`fans_tags`,`top5provinces`,`wbsource`,`usertags`
+		FROM `bozhu_detail` WHERE `bzid` BETWEEN #{low} AND #{high};
+	</select>
+
+</mapper>

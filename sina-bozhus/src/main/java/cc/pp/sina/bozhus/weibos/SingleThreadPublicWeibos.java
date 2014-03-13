@@ -48,12 +48,6 @@ public class SingleThreadPublicWeibos {
 		 * 链接数据库
 		 */
 		WeiboJDBC weiboJDBC = new WeiboJDBC("192.168.1.39", "pp_fenxi", "q#tmuYzC@sqB6!ok@sHd", "pp_fenxi");
-		if (!weiboJDBC.dbConnection()) {
-			logger.info("Db connected unsucessful.");
-			return;
-		} else {
-			logger.info("Db connected sucessful.");
-		}
 
 		// 获取表名
 		String tablename = SINA_USER_WEIBOS + System.currentTimeMillis() / 1000;

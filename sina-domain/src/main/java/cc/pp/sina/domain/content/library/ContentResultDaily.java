@@ -38,6 +38,8 @@ public class ContentResultDaily {
 	private HashMap<String, Integer> allKeywords = new HashMap<>(); // 22、所有关键词(按词频)
 	private HashMap<String, Integer> keywordsOfTopNContent = new HashMap<>(); // 23、top100内容中的关键词
 
+	private HashMap<String, ColumnUsedDetailed> columnUsedDetailed = new HashMap<>(); // 栏目使用详细数据
+
 	public String getType() {
 		return type;
 	}
@@ -244,6 +246,14 @@ public class ContentResultDaily {
 
 	public void setKeywordsOfTopNContent(HashMap<String, Integer> keywordsOfTopNContent) {
 		this.keywordsOfTopNContent = keywordsOfTopNContent;
+	}
+
+	public HashMap<String, ColumnUsedDetailed> getColumnUsedDetailed() {
+		return columnUsedDetailed;
+	}
+
+	public void setColumnUsedDetailed(HashMap<String, ColumnUsedDetailed> columnUsedDetailed) {
+		this.columnUsedDetailed = columnUsedDetailed;
 	}
 
 

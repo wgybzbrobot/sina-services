@@ -43,6 +43,31 @@ public class PriceMapperTest {
     }
 
 	@Test
+	public void testGetSources() throws Exception {
+		List<PriceSource> sources = mapper.getSources(1, 2);
+		assertEquals("[PriceSource{id=2, name='分析价', qq='123456', telephone='', isDefault=null, prices=null}" +
+				", PriceSource{id=3, name='微博易价', qq='', telephone='', isDefault=null, prices=null}]", sources.toString());
+	}
+
+	@Test
+	public void testGetSources2() throws Exception {
+		List<PriceSource> sources = mapper.getSourcesByKeyword("微", 0, 20);
+		assertEquals("[PriceSource{id=3, name='微博易价', qq='', telephone='', isDefault=null, prices=null}" +
+				", PriceSource{id=4, name='微任务价', qq='', telephone='', isDefault=null, prices=null}]", sources.toString());
+
+		assertEquals("[PriceSource{id=2, name='分析价', qq='123456', telephone='', isDefault=null, prices=null}]", mapper.getSourcesByKeyword("123456", 0, 20).toString());
+		assertEquals("[PriceSource{id=1, name='博主报价', qq='', telephone='18888888888', isDefault=null, prices=null}]", mapper.getSourcesByKeyword("18888888888", 0, 20).toString());
+	}
+
+	@Test
+	public void testGetSourceCount() throws Exception {
+		assertEquals(4, mapper.getSourceCount());
+		assertEquals(2, mapper.getSourceCountByKeyword("微"));
+		assertEquals(1, mapper.getSourceCountByKeyword("123456"));
+		assertEquals(1, mapper.getSourceCountByKeyword("18888888888"));
+	}
+
+	@Test
 	public void testGetPriceByBzId() throws Exception {
 		ArrayList<Price> prices = mapper.getPricesByUsername(1772605247);
 		assertEquals(6, prices.size());
@@ -51,7 +76,7 @@ public class PriceMapperTest {
 
 	@Test
 	public void testGetDefaultSourceByUsername() {
-		assertEquals(new PriceSource(1, "博主报价", "", "", 1), mapper.getDefaultSourceByUsername(1772605247));
+		assertEquals("PriceSource{id=1, name='博主报价', qq='', telephone='18888888888', isDefault=1, prices=null}", mapper.getDefaultSourceByUsername(1772605247).toString());
 	}
 
 	@Test

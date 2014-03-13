@@ -28,9 +28,7 @@ public class AnalysisInfo {
 		//		WeiboJDBC weiboJDBC = new WeiboJDBC("127.0.0.1", "root", "root", "pp_fenxi");
 		//		WeiboJDBC weiboJDBC = new WeiboJDBC("192.168.1.47", "pp_fenxi", "q#tmuYzC@sqB6!ok@sHd", "pp_fenxi");
 		WeiboJDBC weiboJDBC = new WeiboJDBC("192.168.1.6", "pp_fenxi", "Gd3am#nB0kiSbiN!o@4KQ", "pp_fenxi");
-		if (!weiboJDBC.dbConnection()) {
-			System.err.println("数据库连接错误！");
-		}
+
 		try {
 			UserAllParamsDomain bozhu = weiboJDBC.getSinaBozhuAllParams(SINA_BOZHUS_LIBRARY, uid);
 			weiboJDBC.dbClose();

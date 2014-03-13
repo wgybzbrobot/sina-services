@@ -11,6 +11,8 @@ import cc.pp.sina.web.server.CommonInfoServer;
 import cc.pp.sina.web.server.ComputeInfoServer;
 import cc.pp.sina.web.server.FuzzySearchServer;
 import cc.pp.sina.web.server.PPCompanyServer;
+import cc.pp.sina.web.server.SinaUsersServer;
+import cc.pp.sina.web.server.T2Server;
 import cc.pp.sina.web.server.ToolServer;
 import cc.pp.sina.web.server.WordSegServer;
 
@@ -73,6 +75,15 @@ public class SinaWebDriver {
 		case "bozhuLibraryServer":
 			logger.info("搜索博主库数据： ");
 			BozhuLibraryServer.main(leftArgs);
+			break;
+		case "sinaUsersServer":
+			logger.info("新浪用户相关的数据服务接口：");
+			SinaUsersServer.main(leftArgs);
+			break;
+		case "t2Server":
+			logger.info("T2数据服务接口：");
+			T2Server.main(leftArgs);
+			break;
 		default:
 			return;
 		}

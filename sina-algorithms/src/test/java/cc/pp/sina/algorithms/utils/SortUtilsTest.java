@@ -12,6 +12,7 @@ public class SortUtilsTest {
 
 	private static HashMap<String, Integer> hs1;
 	private static HashMap<Integer, Integer> hs2;
+	private static HashMap<Long, Integer> hs3;
 
 	@Before
 	public void prepared() {
@@ -23,6 +24,16 @@ public class SortUtilsTest {
 		hs2.put(1, 22);
 		hs2.put(2, 33);
 		hs2.put(3, 11);
+		hs3 = new HashMap<>();
+		hs3.put(1L, 22);
+		hs3.put(2L, 33);
+		hs3.put(3L, 11);
+	}
+
+	@Test
+	public void testSortedToMap() {
+		List<String> result = SortUtils.sortedToMap(hs3, 2);
+		assertEquals("[2=33, 1=22]", result.toString());
 	}
 
 	@Test

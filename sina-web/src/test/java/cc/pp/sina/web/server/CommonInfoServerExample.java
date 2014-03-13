@@ -1,7 +1,5 @@
 package cc.pp.sina.web.server;
 
-import cc.pp.sina.web.driver.SinaWebDriver;
-
 import java.io.IOException;
 
 /**

@@ -1,8 +1,14 @@
 package cc.pp.sina.bozhus.info;
 
+import com.sina.weibo.model.Status;
 import com.sina.weibo.model.StatusWapper;
 
 public interface SinaWeiboInfoDao {
+
+	/**
+	 * 获取单条微博详细数据
+	 */
+	public Status getSingleWeiboDetail(String wid);
 
 	/**
 	 * 单条微博转发数据

@@ -20,9 +20,6 @@ public class CreateFriendsTable {
 
 		//		WeiboJDBC weiboJDBC = new WeiboJDBC("127.0.0.1", "root", "root", "pp_fenxi");
 		WeiboJDBC weiboJDBC = new WeiboJDBC();
-		if (!weiboJDBC.dbConnection()) {
-			System.err.println("Db connected error.");
-		}
 
 		final String friend_table = "sina_user_friends_";
 

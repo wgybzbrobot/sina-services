@@ -11,9 +11,9 @@ import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cc.pp.sina.domain.error.ErrorResponse;
 import cc.pp.sina.utils.json.JsonUtils;
 import cc.pp.sina.web.application.FuzzySearchApplication;
-import cc.pp.sina.web.domain.ErrorResponse;
 
 public class FuzzyQueryResource extends ServerResource {
 

@@ -22,8 +22,13 @@ public class ContentApplication extends Application {
 	 */
 	public static void main(String[] args) {
 
+		if (args.length != 1) {
+			System.err.println("Usage: ContentApplication <port>");
+			System.exit(-1);
+		}
+
 		Component component = new Component();
-		component.getServers().add(Protocol.HTTP, 1111);
+		component.getServers().add(Protocol.HTTP, Integer.parseInt(args[0]));
 		try {
 			component.getDefaultHost().attach("/content", new ContentApplication());
 			component.start();

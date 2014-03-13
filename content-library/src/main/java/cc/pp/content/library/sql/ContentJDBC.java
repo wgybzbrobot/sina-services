@@ -2,7 +2,7 @@ package cc.pp.content.library.sql;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +26,6 @@ public class ContentJDBC {
 
 	private static Logger logger = LoggerFactory.getLogger(ContentJDBC.class);
 
-	private Connection conn;
 	private String db_driver;
 	private String db_user;
 	private String db_password;
@@ -34,10 +34,39 @@ public class ContentJDBC {
 	private String db_port;
 	private final String db_url;
 
+	private BasicDataSource dataSource;
+
+	/**
+	 * 线上环境
+	 */
+	public ContentJDBC() {
+		dbInit();
+		db_url = "jdbc:mysql://" + db_ip + ":" + db_port + "/" + db_name + "?useUnicode=true&characterEncoding=utf-8";
+		dbConnection();
+	}
+
+	/**
+	 * 本地环境
+	 */
+	public ContentJDBC(String dbip, String port, String dbuser, String dbpassword, String dbname) {
+		dbInit();
+		db_user = dbuser;
+		db_password = dbpassword;
+		db_url = "jdbc:mysql://" + dbip + ":" + port + "/" + dbname + "?useUnicode=true&characterEncoding=utf-8";
+		dbConnection();
+	}
+
+	@Override
+	public String toString() {
+		return new StringBuffer().append("Db driver: " + db_driver + "\n").append("Db user: " + db_user + "\n")
+				.append("Db password: " + db_password + "\n").append("Db name: " + db_name + "\n")
+				.append("Db ip: " + db_ip + "\n").append("Db port: " + db_port).toString();
+	}
+
 	/**
 	 * 初始化数据库相关参数
 	 */
-	public void dbInit() {
+	private void dbInit() {
 		Properties props = null;
 		try {
 			props = ContentDbParamsRead.getDbParams();
@@ -53,43 +82,27 @@ public class ContentJDBC {
 	}
 
 	/**
-	 * 线上环境
-	 */
-	public ContentJDBC() {
-		dbInit();
-		db_url = "jdbc:mysql://" + db_ip + ":" + db_port + "/" + db_name + "?useUnicode=true&characterEncoding=utf-8";
-	}
-
-	/**
-	 * 本地环境
-	 */
-	public ContentJDBC(String dbip, String port, String dbuser, String dbpassword, String dbname) {
-		dbInit();
-		db_user = dbuser;
-		db_password = dbpassword;
-		db_url = "jdbc:mysql://" + dbip + ":" + port + "/" + dbname + "?useUnicode=true&characterEncoding=utf-8";
-	}
-
-	@Override
-	public String toString() {
-		return new StringBuffer().append("Db driver: " + db_driver + "\n").append("Db user: " + db_user + "\n")
-				.append("Db password: " + db_password + "\n").append("Db name: " + db_name + "\n")
-				.append("Db ip: " + db_ip + "\n").append("Db port: " + db_port).toString();
-	}
-
-	/**
 	 * 链接数据库
 	 */
-	public boolean dbConnection() {
-		boolean result = true;
+	private void dbConnection() {
+		dataSource = new BasicDataSource();
+		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+		dataSource.setUsername(db_user);
+		dataSource.setPassword(db_password);
+		dataSource.setUrl(db_url);
+		dataSource.setTestOnBorrow(true);
+		dataSource.setValidationQuery("select 1");
+	}
+
+	/**
+	 * 获取链接
+	 */
+	private Connection getConnection() {
 		try {
-			Class.forName(this.db_driver);
-			conn = DriverManager.getConnection(db_url, db_user, db_password);
-		} catch (Exception e) {
-			logger.info("Db connection error.");
-			result = false;
+			return dataSource.getConnection();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
 		}
-		return result;
 	}
 
 	/**
@@ -97,7 +110,7 @@ public class ContentJDBC {
 	 */
 	public void dbClose() {
 		try {
-			conn.close();
+			dataSource.close();
 		} catch (SQLException e) {
 			logger.info("Db close error.");
 		}
@@ -113,7 +126,9 @@ public class ContentJDBC {
 		String sql = "SELECT `cid`,`username`,`status`,`ispower`,`" + recordType + "` FROM " + tablename + " WHERE `"
 				+ recordType + "` >= " + start + " AND `" + recordType + "` <= " + end + " AND `ptype` = \"" + ptype
 				+ "\"";
-		try (Statement statement = this.conn.createStatement(); ResultSet rs = statement.executeQuery(sql);) {
+		try (Connection conn = getConnection();
+				Statement statement = conn.createStatement();
+				ResultSet rs = statement.executeQuery(sql);) {
 			while (rs.next()) {
 				// 针对新浪平台，内容库有错误纪录，将非数字串纪录为username，所以这里加上判断
 				if (JavaPattern.isAllNum(rs.getString("username"))) {
@@ -134,7 +149,9 @@ public class ContentJDBC {
 
 		String sql = "SELECT `cid`,`tid`,`content`,`picture`,`video`,`music` FROM " + tablename + " WHERE `cid` = "
 				+ cid;
-		try (Statement statement = this.conn.createStatement(); ResultSet rs = statement.executeQuery(sql);) {
+		try (Connection conn = getConnection();
+				Statement statement = conn.createStatement();
+				ResultSet rs = statement.executeQuery(sql);) {
 			if (rs.next()) {
 				return new ContentInfo.Builder().setCid(rs.getInt("cid")).setContent(rs.getString("content"))
 						.setMusic(rs.getString("music")).setPicture(rs.getString("picture")).setTid(rs.getInt("tid"))
@@ -152,7 +169,9 @@ public class ContentJDBC {
 
 		HashMap<Integer, String> result = new HashMap<>();
 		String sql = "SELECT `tid`,`name` FROM " + tablename;
-		try (Statement statement = this.conn.createStatement(); ResultSet rs = statement.executeQuery(sql);) {
+		try (Connection conn = getConnection();
+				Statement statement = conn.createStatement();
+				ResultSet rs = statement.executeQuery(sql);) {
 			while (rs.next()) {
 				result.put(rs.getInt("tid"), rs.getString("name"));
 			}
@@ -193,7 +212,7 @@ public class ContentJDBC {
 				+ "`allKeywords` text NOT NULL COMMENT '所有关键词(按词频)',"
 				+ "`keywordsOfTopNContent` text NOT NULL COMMENT 'top100内容中的关键词',"
 				+ " PRIMARY KEY (`id`) KEY `type` (`type`),KEY `date` (`date`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='内容库统计数据表' AUTO_INCREMENT=1 ;";
-		try (Statement statement = this.conn.createStatement();) {
+		try (Connection conn = getConnection(); Statement statement = conn.createStatement();) {
 			statement.execute(sql);
 		}
 	}
@@ -207,9 +226,9 @@ public class ContentJDBC {
 				+ " (`type`,`date`,`recordType`,`errorRatio`,`contentCount`,`powerRatio`,`fromContentRatio`,`fromContentRatioByHour`,"
 				+ "`userCount`,`userByHour`,`userQuality`,`userQualityByHour`,`contentUsedQuality`,`realContentUsedByHour`,"
 				+ "`columnUsedCount`,`columnUsedSort`,`columnTop10ByHour`,`contentTop100`,`picVideoMusicRatio`,`top10CloumnByPicUsed`,"
-				+ "`top100Ips`,`top10IpSection`,`source`,`sendStatus`,`allKeywords`,`keywordsOfTopNContent`) VALUES"
-				+ " (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		try (PreparedStatement pstmt = this.conn.prepareStatement(sql);) {
+				+ "`top100Ips`,`top10IpSection`,`source`,`sendStatus`,`allKeywords`,`keywordsOfTopNContent`,`columnUsedDetailed`) VALUES"
+				+ " (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
 			pstmt.setString(1, result.getType());
 			pstmt.setString(2, result.getDate());
 			pstmt.setString(3, result.getRecordType());
@@ -236,7 +255,24 @@ public class ContentJDBC {
 			pstmt.setString(24, JsonUtils.toJson(result.getSendStatus()));
 			pstmt.setString(25, JsonUtils.toJson(result.getAllKeywords()));
 			pstmt.setString(26, JsonUtils.toJson(result.getKeywordsOfTopNContent()));
+			pstmt.setString(27, JsonUtils.toJson(result.getColumnUsedDetailed()));
 			pstmt.execute();
+		}
+	}
+
+	/**
+	 * 读取当前数据库的所有表名
+	 */
+	public List<String> getTablesInCurrentDB() throws SQLException {
+
+		List<String> result = new ArrayList<>();
+		try (Connection conn = getConnection();) {
+			DatabaseMetaData meta = conn.getMetaData();
+			ResultSet rs = meta.getTables(null, null, null, new String[] { "TABLE" });
+			while (rs.next()) {
+				result.add(rs.getString(3));
+			}
+			return result;
 		}
 	}
 

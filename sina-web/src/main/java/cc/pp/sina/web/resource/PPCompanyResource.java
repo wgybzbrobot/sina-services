@@ -11,12 +11,12 @@ import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cc.pp.sina.domain.error.ErrorResponse;
 import cc.pp.sina.domain.sql.UserBaseInfo;
 import cc.pp.sina.utils.java.JavaPattern;
 import cc.pp.sina.utils.json.JsonUtils;
 import cc.pp.sina.utils.net.URLCode;
 import cc.pp.sina.web.application.PPCompanyApplication;
-import cc.pp.sina.web.domain.ErrorResponse;
 
 public class PPCompanyResource extends ServerResource {
 

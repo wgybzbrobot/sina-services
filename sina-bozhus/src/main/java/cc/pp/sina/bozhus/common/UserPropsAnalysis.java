@@ -38,6 +38,20 @@ public class UserPropsAnalysis {
 		}
 	}
 
+	public static int analysisAge(User bozhuBaseInfo) {
+		if (bozhuBaseInfo.getStatusesCount() < 100) {
+			return 0; //0----"others"
+		} else if (bozhuBaseInfo.getStatusesCount() < 1000) {
+			return 1; //1----"80s"
+		} else if (bozhuBaseInfo.getStatusesCount() < 5000) {
+			return 2; //2----"90s"
+		} else if (bozhuBaseInfo.getStatusesCount() < 10000) {
+			return 3; //3----"70s"
+		} else {
+			return 4; //4----"60s"
+		}
+	}
+
 	/**
 	 * 性别分析
 	 */
@@ -152,6 +166,22 @@ public class UserPropsAnalysis {
 		} else if (bozhuBaseInfo.getVerified_type() == 400) {
 			return 11;
 		} else if (bozhuBaseInfo.getVerified_type() == -1) {
+			return 12;
+		} else {
+			return 13;
+		}
+	}
+
+	public static int analysisVerifiedType(User bozhuBaseInfo) {
+		if ((bozhuBaseInfo.getVerifiedType() < 9) && (bozhuBaseInfo.getVerifiedType() >= 0)) {
+			return bozhuBaseInfo.getVerifiedType();
+		} else if (bozhuBaseInfo.getVerifiedType() == 200) {
+			return 9;
+		} else if (bozhuBaseInfo.getVerifiedType() == 220) {
+			return 10;
+		} else if (bozhuBaseInfo.getVerifiedType() == 400) {
+			return 11;
+		} else if (bozhuBaseInfo.getVerifiedType() == -1) {
 			return 12;
 		} else {
 			return 13;

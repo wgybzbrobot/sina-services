@@ -57,7 +57,7 @@ public class BozhusLibrary {
 	 * 用户所有参数分析
 	 */
 	public static UserAllParamsDomain userAllParams(SinaWeiboInfoDao sinaWeiboInfoDao, SinaUserInfoDao sinaUserInfoDao,
-			String uid) throws WeiboException, SQLException {
+			String uid) {
 
 		/*
 		 * 用户及其粉丝分析，10页粉丝数据，每页200个，最多25页
@@ -80,7 +80,7 @@ public class BozhusLibrary {
 		 *     第三个参数：10页微博数据，每页100个，最多20页
 		 *     第四个参数：分析单条微博条数
 		 */
-		UserAllWeibosDomain userWeibos = UserAllWeibosParams.analysis(uid, sinaWeiboInfoDao, 5, 5);
+		UserAllWeibosDomain userWeibos = UserAllWeibosParams.analysis(uid, sinaWeiboInfoDao, 5, 10);
 		if (userWeibos == null) {
 			userWeibos = new UserAllWeibosDomain.Builder().build();
 		}
@@ -123,7 +123,8 @@ public class BozhusLibrary {
 				.setAvereposterquality(weibosParams.getAvereposterquality())
 				.setAveexposionsum(weibosParams.getAveexposionsum() + userFans.getFanscount())
 				.setValidrepcombyweek(validRepComByWeek).setValidrepcombymonth(validRepComByMonth)
-				.setUsertags(userTags).setCreatedtime(userFans.getCreatedtime()).build();
+				.setUsertags(userTags).setCreatedtime(userFans.getCreatedtime()).setFansage(userFans.getFansage())
+				.setFanstags(userFans.getFanstags()).build();
 
 		return result;
 	}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.pp.sina.dao.t2.T2SingleWeiboDao">
+
+	<!-- 获取待分析微博id -->
+	<select id="getNewWids" parameterType="string" resultType="string">
+		SELECT `wid` FROM `t2_single_weibo` WHERE `type` = #{type} AND
+		`weiboresult` = '';
+	</select>
+
+	<!-- 插入单条微博信息 -->
+	<insert id="insertSingleWeibo" parameterType="T2SingleWeiboInfo"
+		useGeneratedKeys="true" keyProperty="id" flushCache="true"
+		statementType="PREPARED">
+		INSERT `t2_single_weibo`
+		(`type`,`wid`,`url`,`weiboresult`,`lasttime`) VALUES
+		(#{type},#{wid},#{url},#{weiboresult},UNIX_TIMESTAMP());
+	</insert>
+
+	<!-- 更新单条微博分析结果 -->
+	<update id="updateSingleWeibo" parameterType="T2SingleWeiboInfo">
+		UPDATE
+		`t2_single_weibo` SET `weiboresult` = #{weiboresult},`lasttime`
+		=
+		UNIX_TIMESTAMP() WHERE `wid` = #{wid};
+	</update>
+
+	<!-- 获取单条微博分析结果 -->
+	<select id="selectSingleWeibo" parameterType="long" resultType="T2SingleWeiboInfo">
+		SELECT `type`,`wid`,`url`,`weiboresult` FROM `t2_single_weibo` WHERE
+		`wid`
+		= #{wid};
+	</select>
+
+	<!-- 删除单条微博 -->
+	<delete id="deleteSingleWeibo" parameterType="long">
+		DELETE FROM
+		`t2_single_weibo` WHERE `wid` = #{wid};
+	</delete>
+
+</mapper>

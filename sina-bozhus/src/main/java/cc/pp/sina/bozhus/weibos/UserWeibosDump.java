@@ -1,18 +1,20 @@
 package cc.pp.sina.bozhus.weibos;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cc.pp.sina.bozhus.info.SinaWeiboInfoDao;
 import cc.pp.sina.bozhus.info.SinaWeiboInfoDaoImpl;
 import cc.pp.sina.bozhus.sql.WeiboJDBC;
 import cc.pp.sina.tokens.service.TokenService;
+
 import com.sina.weibo.model.Status;
 import com.sina.weibo.model.StatusWapper;
 import com.sina.weibo.model.WeiboException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserWeibosDump {
 
@@ -31,9 +33,6 @@ public class UserWeibosDump {
 		SinaWeiboInfoDao sinaWeiboInfoDao = new SinaWeiboInfoDaoImpl(tokenService);
 
 		WeiboJDBC weiboJDBC = new WeiboJDBC("127.0.0.1", "root", "root", "pp_fenxi");
-		if (!weiboJDBC.dbConnection()) {
-			System.err.println("Db connected error.");
-		}
 
 		//		weiboJDBC.createSinaUserWeibosTable("sina_user_weibos");
 		UserWeibosDump.weibosDump(weiboJDBC, "sina_user_weibos", "1649155730", sinaWeiboInfoDao, 20);

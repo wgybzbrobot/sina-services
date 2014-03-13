@@ -14,13 +14,20 @@ import cc.pp.sina.bozhus.fans.FansAnalysisMain;
 import cc.pp.sina.bozhus.fans.PPUserFansDemo;
 import cc.pp.sina.bozhus.fans.PPUserFansUpdateMain;
 import cc.pp.sina.bozhus.friends.CreateFriendsTable;
-import cc.pp.sina.bozhus.library.BozhuLibraryMain;
 import cc.pp.sina.bozhus.library.BozhusLeftGetMain;
+import cc.pp.sina.bozhus.library.BozhusLibraryMain;
 import cc.pp.sina.bozhus.pp.HighQualityUsersMain;
+import cc.pp.sina.bozhus.t2.T2FansAnalysis;
+import cc.pp.sina.bozhus.t2.T2FansTimerTask;
+import cc.pp.sina.bozhus.t2.T2InteractionsAnalysis;
+import cc.pp.sina.bozhus.t2.T2InteractionsTimerTask;
+import cc.pp.sina.bozhus.t2.T2SingleWeiboAnalysis;
+import cc.pp.sina.bozhus.t2.T2SingleWeiboTimerTask;
 import cc.pp.sina.bozhus.tags.BatchTagsMain;
 import cc.pp.sina.bozhus.tags.RemoveRepeatsForTags;
 import cc.pp.sina.bozhus.weibos.HistoryWeibosDumpMain;
 import cc.pp.sina.bozhus.weibos.SingleThreadPublicWeibos;
+import cc.pp.sina.bozhus.weirenwu.WeiRenWuMain;
 
 /**
  * 驱动类
@@ -52,7 +59,7 @@ public class SinaBozhusDriver {
 			break;
 		case "bozhuLibraryMain":
 			logger.info("采集用户特性数据： ");
-			BozhuLibraryMain.main(null);
+			BozhusLibraryMain.main(null);
 			break;
 		case "ppUserFans":
 			logger.info("采集皮皮用户粉丝数据： ");
@@ -113,6 +120,34 @@ public class SinaBozhusDriver {
 		case "createFriendsTable":
 			logger.info("创建新浪用户关注数据表: ");
 			CreateFriendsTable.main(restArgs);
+			break;
+		case "InteractionsAnalysis":
+			logger.info("用户与粉丝的交互数据分析：");
+			T2InteractionsAnalysis.main(restArgs);
+			break;
+		case "t2InteractionsTimerTask":
+			logger.info("新浪用户与粉丝交互数据定时分析：");
+			T2InteractionsTimerTask.main(restArgs);
+			break;
+		case "t2FansTimerTask":
+			logger.info("新浪用户粉丝定时分析：");
+			T2FansTimerTask.main(restArgs);
+			break;
+		case "t2SingleWeiboTimerTask":
+			logger.info("新浪单条微博定时分析：");
+			T2SingleWeiboTimerTask.main(restArgs);
+			break;
+		case "t2SingleWeiboAnalysis":
+			logger.info("新浪单条微博分析：");
+			T2SingleWeiboAnalysis.main(restArgs);
+			break;
+		case "t2FansAnalysis":
+			logger.info("新浪用户粉丝分析：");
+			T2FansAnalysis.main(restArgs);
+			break;
+		case "weiRenWuMain":
+			logger.info("微任务数据分析：");
+			WeiRenWuMain.main(restArgs);
 			break;
 		default:
 			return;

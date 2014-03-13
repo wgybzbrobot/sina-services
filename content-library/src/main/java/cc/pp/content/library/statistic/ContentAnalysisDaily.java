@@ -13,7 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cc.pp.content.library.sql.ContentJDBC;
+import cc.pp.content.library.sql.ContentJDBCUtils;
 import cc.pp.sina.algorithms.utils.SortUtils;
+import cc.pp.sina.domain.content.library.ColumnUsedDetailed;
 import cc.pp.sina.domain.content.library.ContentInfo;
 import cc.pp.sina.domain.content.library.ContentResultDaily;
 import cc.pp.sina.domain.content.library.SendInfo;
@@ -31,7 +33,7 @@ public class ContentAnalysisDaily {
 	private static final String TIMER_RECORD_TABLE = "wb_library_record_";
 	private static final String CONTENT_TYPES_TABLE = "wb_library_type";
 	private static final String WEIBO_LIBRARY_TABLE = "wb_library";
-	private static final String CONTENT_RESULT_TABLE = "wb_content_result";
+	private static final String CONTENT_RESULT_TABLE_NEW = "wb_content_result_new";
 
 	private static final int THRESHOLD = 2;
 
@@ -59,20 +61,18 @@ public class ContentAnalysisDaily {
 	 */
 	public static void main(String[] args) {
 
-		if (args.length < 6) {
-			System.err.println("Usage: ContentAnalysisDaily <-tableNum int (all record tables, eg: 80)> "
-					+ "<-dayFromNow int (0-today,-1-yestady and so on)> <-recordType str (sendtime or recordtime)>");
+		if (args.length < 4) {
+			System.err.println("Usage: ContentAnalysisDaily <-dayFromNow int (0-today,-1-yestady and so on)>"
+					+ " <-recordType str (sendtime or recordtime)>");
 			System.exit(-1);
 		}
 
-		int tableNum = 84;
+		int tableNum = ContentJDBCUtils.getTablesNum("wb_library_record_") - 1;
+		logger.info("Tables' num is " + tableNum);
 		int day = 0; // 代表今天
 		String recordType = "sendtime"; // sendtime/recordtime
 		for (int i = 0; i < args.length; i++) {
-			if ("-tableNum".equals(args[i])) {
-				tableNum = Integer.parseInt(args[i + 1]);
-				i++;
-			} else if ("-dayFromNow".equals(args[i])) {
+			if ("-dayFromNow".equals(args[i])) {
 				day = Integer.parseInt(args[i + 1]);
 				i++;
 			} else if ("-recordType".equals(args[i])) {
@@ -98,12 +98,8 @@ public class ContentAnalysisDaily {
 		 */
 		ContentJDBC recordJDBC = new ContentJDBC("192.168.1.22", "3304", "library_record", "w@15z!z21H3h#Yoi5f8Q",
 				"pp_library_record");
-		if (recordJDBC.dbConnection()) {
-			logger.info("RecordJDBC connected successful.");
-		} else {
-			logger.info("RecordJDBC connected unsuccessful.");
-			return;
-		}
+		logger.info("RecordJDBC connected successful.");
+
 		logger.info("Getting Timer Records ...");
 		// 某一天的定时纪录数据
 		List<SendInfo> timerRecords = new ArrayList<>();
@@ -135,9 +131,7 @@ public class ContentAnalysisDaily {
 		 */
 		ContentJDBC contentTypeJDBC = new ContentJDBC("192.168.1.33", "3302", "pp_library", "0U@dKz#Qy4KX!Cwg@d9c",
 				"pp_library");
-		if (contentTypeJDBC.dbConnection()) {
-			logger.info("ContentTypeJDBC connected successful.");
-		}
+		logger.info("ContentTypeJDBC connected successful.");
 		logger.info("Getting Weibo Content Types ...");
 		HashMap<Integer, String> contentTypes = null;
 		try {
@@ -171,6 +165,11 @@ public class ContentAnalysisDaily {
 				temp24h[i1][i2] = 0;
 			}
 		}
+		/**
+		 * 每个栏目使用详细情况，即每个栏目使用的用户及其次数。
+		 */
+		HashMap<Integer, HashMap<Long, Integer>> columnUsed = new HashMap<>();
+
 		SimpleDateFormat format = new SimpleDateFormat("HH");
 		int empty = 0; // 内容库错误条数
 		int powerCount = 0; // 来自皮皮动力的数量
@@ -191,10 +190,12 @@ public class ContentAnalysisDaily {
 		/*
 		 * 循环计算
 		 */
-		//		int count = 0;
+		int count = 0;
 		ContentInfo contentInfo = null;
 		for (SendInfo sendInfo : timerRecords) {
-			//			logger.info("Computing at: " + count++);
+			if (++count % 1000 == 0) {
+				logger.info("Computing at: " + count);
+			}
 			if (sendInfo.getIspower() == 1) {
 				powerCount++;
 			}
@@ -248,6 +249,22 @@ public class ContentAnalysisDaily {
 			} else {
 				columResult.put(contentInfo.getTid(), columResult.get(contentInfo.getTid()) + 1);
 			}
+			/**
+			 * 统计每个栏目的详细情况
+			 */
+			if (columnUsed.get(contentInfo.getTid()) == null) {
+				HashMap<Long, Integer> t = new HashMap<>();
+				t.put(sendInfo.getUsername(), 1);
+				columnUsed.put(contentInfo.getTid(), t);
+			} else {
+				if (columnUsed.get(contentInfo.getTid()).get(sendInfo.getUsername()) == null) {
+					columnUsed.get(contentInfo.getTid()).put(sendInfo.getUsername(), 1);
+				} else {
+					columnUsed.get(contentInfo.getTid()).put(sendInfo.getUsername(),
+							columnUsed.get(contentInfo.getTid()).get(sendInfo.getUsername()) + 1);
+				}
+			}
+
 			// 统计每天24个时段排名前10的栏目
 			temp24h[hour][contentInfo.getTid()]++;
 			// 统计每天每个小时内容来自内容库的比例，这些都来自内容库，所以最终比例为1
@@ -389,6 +406,28 @@ public class ContentAnalysisDaily {
 		/********************0、内容库错误记录率***************************/
 		result.setErrorRatio((float) empty / timerRecords.size());
 
+		/**
+		 * 增加统计字段
+		 */
+		HashMap<String, ColumnUsedDetailed> columnUsedDetaileds = new HashMap<>();
+		HashMap<Long, Integer> topUids = new HashMap<>();
+		logger.info("Column number is : " + columnUsed.size());
+		count = 0;
+		for (Entry<Integer, HashMap<Long, Integer>> temp : columnUsed.entrySet()) {
+			logger.info("Tackle column : " + count++);
+			ColumnUsedDetailed columnUsedDetailed = new ColumnUsedDetailed();
+			// 用户数
+			columnUsedDetailed.setUserCount(temp.getValue().size());
+			// 内容数
+			columnUsedDetailed.setCountentCount(MapUtils.getSum(temp.getValue()));
+			// Top50用户
+			topUids = SortUtils.sortedToList(temp.getValue(), 50);
+			UsersInfoStatistic.coveringAndTopNUsers(topUids, temp.getValue().size(), columnUsedDetailed);
+
+			columnUsedDetaileds.put(contentTypes.get(temp.getKey()), columnUsedDetailed);
+		}
+		result.setColumnUsedDetailed(columnUsedDetaileds);
+
 		//		System.out.println(JsonUtils.toJson(result));
 
 		/*
@@ -398,15 +437,12 @@ public class ContentAnalysisDaily {
 		 *       pp_fenxi
 		 */
 		ContentJDBC resultJDBC = new ContentJDBC("192.168.1.6", "3306", "pp_fenxi", "Gd3am#nB0kiSbiN!o@4KQ", "pp_fenxi");
-		if (resultJDBC.dbConnection()) {
-			logger.info("ResultJDBC connected successful.");
-		}
 		try {
 			//			resultJDBC.createContentResultTable(CONTENT_RESULT_TABLE);
-			resultJDBC.insertContentResultTable(CONTENT_RESULT_TABLE, result);
+			resultJDBC.insertContentResultTable(CONTENT_RESULT_TABLE_NEW, result);
 		} catch (SQLException e) {
-			e.printStackTrace();
 			logger.info("Creating content analysis table or Inserting result unsuccessful.");
+			throw new RuntimeException(e);
 		}
 		resultJDBC.dbClose();
 		logger.info("Result inserted successful.");

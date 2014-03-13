@@ -33,9 +33,7 @@ public class CreateExtendTables {
 
 		//		WeiboJDBC weiboJDBC = new WeiboJDBC("127.0.0.1", "root", "root", "pp_fenxi");
 		WeiboJDBC weiboJDBC = new WeiboJDBC("192.168.1.48", "pp_fenxi", "q#tmuYzC@sqB6!ok@sHd", "pp_fenxi");
-		if (!weiboJDBC.dbConnection()) {
-			System.err.println("数据库链接失败！");
-		}
+
 		for (int i = 0; i < num; i++) {
 			try {
 				weiboJDBC.createExtendTable(EXTEND_TABLE + i);

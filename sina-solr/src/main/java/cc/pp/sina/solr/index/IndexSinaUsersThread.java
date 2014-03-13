@@ -18,11 +18,16 @@ import cc.pp.sina.dao.users.SinaUsers;
 import cc.pp.sina.domain.friends.FriendsInfo;
 import cc.pp.sina.domain.users.UserInfo;
 
+/**
+ * 通过HTTP方式索引数据到CoudSolr上。
+ * @author wgybzb
+ *
+ */
 public class IndexSinaUsersThread {
 
 	private static Logger logger = LoggerFactory.getLogger(IndexSinaUsersThread.class);
 
-	/**
+	/*
 	 * 新浪用户关注数据获取
 	 */
 	private static final String SINA_USER_FRIENDS = "sina_user_friends_";
@@ -30,9 +35,11 @@ public class IndexSinaUsersThread {
 	private static SinaFriendsDis sinaFriends2 = new SinaFriendsDis(MybatisConfig.ServerEnum.friend2);
 
 	private static final String SINA_USER_BASEINFO = "sinauserbaseinfo_";
-	private static final int FETCH_SIZE = 1_0000;
+	private static final int FETCH_SIZE = 10_0000;
 
-	private static final String ZOOKEEPER_CLOUD = "wuhu001:2181,wuhu005:2181,wuhu009:2181,wuhu013:2181,wuhu017:2181";
+	//	private static final String ZOOKEEPER_CLOUD = "wuhu001:2181,wuhu005:2181,wuhu009:2181,wuhu013:2181,wuhu017:2181";
+	// 这里使用集群中的一个结点即可
+	private static final String ZOOKEEPER_CLOUD = "wuhu017:2181";
 	private static final String COLLECTION_NAME = "sina_users";
 
 	private CloudSolrServer cloudServer;
@@ -41,6 +48,9 @@ public class IndexSinaUsersThread {
 		try {
 			cloudServer = new CloudSolrServer(ZOOKEEPER_CLOUD);
 			cloudServer.setDefaultCollection(COLLECTION_NAME);
+			cloudServer.setParallelUpdates(true);
+			cloudServer.setZkConnectTimeout(5_000);
+			cloudServer.setZkClientTimeout(5_000);
 		} catch (MalformedURLException e) {
 			throw new RuntimeException(e);
 		}
@@ -77,6 +87,9 @@ public class IndexSinaUsersThread {
 	 * 索引数据
 	 */
 	public void addDocsToSolr(List<UserInfo> users) {
+		if (users.size() == 0) {
+			return;
+		}
 		Collection<SolrInputDocument> docs = new ArrayList<>();
 		for (UserInfo user : users) {
 			docs.add(getDoc(user));

@@ -1,16 +1,15 @@
 package cc.pp.sina.web.resource;
 
-import org.restlet.ext.json.JsonRepresentation;
-import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cc.pp.sina.domain.bozhus.BozhuBaseInfo;
+import cc.pp.sina.domain.error.ErrorResponse;
 import cc.pp.sina.utils.java.JavaPattern;
-import cc.pp.sina.utils.json.JsonUtils;
-import cc.pp.sina.web.application.CommonInfoApplication;
-import cc.pp.sina.web.domain.ErrorResponse;
+import cc.pp.sina.web.application.SinaUsersApplication;
+import cc.pp.sina.web.common.HttpUtils;
 
 public class BaseInfoResource extends ServerResource {
 
@@ -22,21 +21,35 @@ public class BaseInfoResource extends ServerResource {
 	public void doInit() {
 		String uidStr = (String) this.getRequest().getAttributes().get("uid");
 		if (!JavaPattern.isAllNum(uidStr)) {
-			logger.info("The 'uidStr' is illegal, it should be long.");
+			logger.info("The 'uid' is illegal, it should be long.");
 		} else {
 			uid = Long.parseLong(uidStr);
 		}
 	}
 
+	//	@Get("json")
+	//	public Representation getFansUids() {
+	//		if (uid == 0) {
+	//			return new JsonRepresentation(JsonUtils.toJson(new ErrorResponse.Builder(20003,
+	//					"your query params is illegal.").build()));
+	//		}
+	//		logger.info("Request Url: " + getReference() + ".");
+	//		CommonInfoApplication application = (CommonInfoApplication) getApplication(); // 旧接口使用的应用
+	//		return new JsonRepresentation(JsonUtils.toJson(application.getBaseInfo(uid)));
+	//	}
+
 	@Get("json")
-	public Representation getFansUids() {
+	public Object getBaseInfo() {
 		if (uid == 0) {
-			return new JsonRepresentation(JsonUtils.toJson(new ErrorResponse.Builder(20003,
-					"your query params is illegal.").build()));
+			return new ErrorResponse.Builder(20003, "your query params is illegal.").build();
 		}
 		logger.info("Request Url: " + getReference() + ".");
-		CommonInfoApplication application = (CommonInfoApplication) getApplication();
-		return new JsonRepresentation(JsonUtils.toJson(application.getBaseInfo(uid)));
+		SinaUsersApplication application = (SinaUsersApplication) getApplication();
+		BozhuBaseInfo userInfo = application.getBaseInfo(uid);
+		if (userInfo == null) {
+			return HttpUtils.doGet("http://60.169.74.26:8111/sina/users/" + uid + "/fromapi", "utf-8");
+		}
+		return userInfo;
 	}
 
 }

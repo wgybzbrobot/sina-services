@@ -6,6 +6,8 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cc.pp.content.library.sql.ContentJDBCUtils;
+
 /**
  * 每天定时分析昨天内容库的使用数据
  *
@@ -19,11 +21,8 @@ public class TimerContentAnalysis {
 	 */
 	public static void main(String[] args) {
 
-		if (args.length != 1) {
-			System.err.println("Usage: <tableNum>");
-		}
-
-		int tableNum = Integer.parseInt(args[0]);
+		int tableNum = ContentJDBCUtils.getTablesNum("wb_library_record_") - 1;
+		logger.info("Tables' num is " + tableNum);
 
 		Timer timer = new Timer();
 		/*

@@ -1,16 +1,20 @@
 package cc.pp.sina.dao.price;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import cc.pp.sina.dao.BozhuMapper;
-import cc.pp.sina.dao.price.BozhuDbConnection;
-import cc.pp.sina.dao.price.PriceMapper;
 import cc.pp.sina.domain.bozhus.BozhuPrice;
 import cc.pp.sina.domain.bozhus.price.Price;
 import cc.pp.sina.domain.bozhus.price.PriceSource;
+import cc.pp.sina.domain.bozhus.price.PriceType;
 import cc.pp.sina.utils.config.Config;
 
 /**
@@ -85,7 +89,25 @@ public class PriceService {
 		}
 	}
 
-	public Collection<PriceSource> getSourcePrices(BozhuPrice bozhuPrice) {
+	public int getSourceCount() {
+		try (SqlSession session = sessionFactory.openSession()) {
+			PriceMapper mapper = session.getMapper(PriceMapper.class);
+			int result = mapper.getSourceCount();
+			session.commit();
+			return result;
+		}
+	}
+
+	public int getSourceCount(String keyword) {
+		try (SqlSession session = sessionFactory.openSession()) {
+			PriceMapper mapper = session.getMapper(PriceMapper.class);
+			int result = mapper.getSourceCountByKeyword(keyword);
+			session.commit();
+			return result;
+		}
+	}
+
+	public Collection<PriceSource> getSources(BozhuPrice bozhuPrice) {
 		try (SqlSession session = sessionFactory.openSession()) {
 			PriceMapper mapper = session.getMapper(PriceMapper.class);
 			Map<Integer, PriceSource> sources = new HashMap<>();
@@ -98,7 +120,25 @@ public class PriceService {
 				source.addPrice(price);
 			}
 			session.commit();
-			return new ArrayList<PriceSource>(sources.values());
+			return new ArrayList<>(sources.values());
+		}
+	}
+
+	public Collection<PriceSource> getSources(int offset, int limit) {
+		try (SqlSession session = sessionFactory.openSession()) {
+			PriceMapper mapper = session.getMapper(PriceMapper.class);
+			List<PriceSource> result = mapper.getSources(offset, limit);
+			session.commit();
+			return result;
+		}
+	}
+
+	public Collection<PriceSource> getSources(String keyword, int offset, int limit) {
+		try (SqlSession session = sessionFactory.openSession()) {
+			PriceMapper mapper = session.getMapper(PriceMapper.class);
+			List<PriceSource> result = mapper.getSourcesByKeyword(keyword, offset, limit);
+			session.commit();
+			return result;
 		}
 	}
 
@@ -106,6 +146,15 @@ public class PriceService {
 		try (SqlSession session = sessionFactory.openSession()) {
 			PriceMapper mapper = session.getMapper(PriceMapper.class);
 			PriceSource result = getSource(bozhuPrice, sourceId, mapper);
+			session.commit();
+			return result;
+		}
+	}
+
+	public Collection<PriceType> getTypes() {
+		try (SqlSession session = sessionFactory.openSession()) {
+			PriceMapper mapper = session.getMapper(PriceMapper.class);
+			List<PriceType> result = mapper.getTypes();
 			session.commit();
 			return result;
 		}
@@ -140,6 +189,24 @@ public class PriceService {
 			mapper.updatePrice(price);
 		}
 		return price;
+	}
+
+	public PriceSource getSourceByQq(String qq) {
+		try (SqlSession session = sessionFactory.openSession()) {
+			PriceMapper mapper = session.getMapper(PriceMapper.class);
+			PriceSource result = mapper.getSourcesByQq(qq);
+			session.commit();
+			return result;
+		}
+	}
+
+	public PriceSource getSourceByTelephone(String telephone) {
+		try (SqlSession session = sessionFactory.openSession()) {
+			PriceMapper mapper = session.getMapper(PriceMapper.class);
+			PriceSource result = mapper.getSourcesByTelephone(telephone);
+			session.commit();
+			return result;
+		}
 	}
 
 }

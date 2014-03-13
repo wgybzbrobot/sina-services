@@ -113,12 +113,13 @@
 				<executions>
 					<!-- 测试前创建test库 -->
 					<execution>
-						<id>bozhu</id>
+						<id>create-schema</id>
 						<phase>process-test-resources</phase>
 						<goals>
 							<goal>execute</goal>
 						</goals>
 						<configuration>
+							<autocommit>true</autocommit>
 							<srcFiles>
 								<srcFile>src/test/sql/bozhu.sql</srcFile>
 							</srcFiles>

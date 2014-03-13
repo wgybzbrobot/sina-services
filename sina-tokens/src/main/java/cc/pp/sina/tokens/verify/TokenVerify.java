@@ -13,18 +13,16 @@ import cc.pp.sina.domain.tokens.TokenInfo;
 public class TokenVerify {
 
 	private static final String BASEURL = "https://api.weibo.com/oauth2/get_token_info?access_token=";
-	private static HttpUtils httpUtils;
 	private static ObjectMapper mapper;
 
 	static {
-		httpUtils = new HttpUtils();
 		mapper = new ObjectMapper();
 	}
 
 	public static long getTokenExpirein(String token) throws JsonParseException, JsonMappingException, IOException {
 
 		String url = BASEURL + token;
-		TokenInfo tokenInfo = mapper.readValue(httpUtils.doPost(url, "utf-8"), TokenInfo.class);
+		TokenInfo tokenInfo = mapper.readValue(HttpUtils.doPost(url, "utf-8"), TokenInfo.class);
 
 		return tokenInfo.getExpire_in();
 	}

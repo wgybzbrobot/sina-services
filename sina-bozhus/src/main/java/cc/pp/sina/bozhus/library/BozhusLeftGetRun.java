@@ -1,7 +1,6 @@
 package cc.pp.sina.bozhus.library;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import net.sf.json.JSONArray;
@@ -79,9 +78,6 @@ public class BozhusLeftGetRun implements Runnable {
 			}
 		} catch (WeiboException e) {
 			logger.info("WeiboException is occurs in User: " + uid);
-			e.printStackTrace();
-		} catch (SQLException e) {
-			logger.info("SQLException is occurs in User: " + uid);
 			e.printStackTrace();
 		} catch (HttpException e) {
 			logger.info("HttpException is occurs in User: " + uid);

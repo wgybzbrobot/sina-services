@@ -1,16 +1,13 @@
 package cc.pp.sina.dao.price;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
-
 import cc.pp.sina.domain.bozhus.price.Price;
 import cc.pp.sina.domain.bozhus.price.PriceSource;
+import cc.pp.sina.domain.bozhus.price.PriceType;
+
+import org.apache.ibatis.annotations.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public interface PriceMapper {
 
@@ -49,10 +46,42 @@ public interface PriceMapper {
 			" WHERE s.id = #{1}")
 	PriceSource getSource(long username, int sourceId);
 
+	@Select("select count(id) from bozhu_price_source")
+	int getSourceCount();
+
+	@Select("SELECT count(`id`) " +
+			" FROM bozhu_price_source " +
+			" where name like CONCAT('%', #{keyword}, '%') or qq = #{keyword} or telephone = #{keyword}")
+	int getSourceCountByKeyword(String keyword);
+
+	@Select("SELECT `id`,`name`,`qq`,`telephone` " +
+			" FROM bozhu_price_source " +
+			" limit #{0}, #{1}")
+	List<PriceSource> getSources(int offset, int limit);
+
+	@Select("SELECT `id`,`name`,`qq`,`telephone` " +
+			" FROM bozhu_price_source " +
+			" where name like '%${param1}%' or qq = #{0} or telephone = #{0}" +
+			" limit #{1}, #{2}")
+	List<PriceSource> getSourcesByKeyword(String keyword, int offset, int limit);
+
+	@Select("select id, name from bozhu_price_type")
+	List<PriceType> getTypes();
+
 	@Update("update bozhu_price set price = #{price}, update_time = now() where username = #{username} and sourceid = #{sourceId} and typeid = #{typeId}")
 	void updatePrice(Price price);
 
 	@Update("update bozhu_price_source set name = #{name}, qq = #{qq}, telephone = #{telephone} where id = #{id}")
 	void updateSource(PriceSource source);
+
+	@Select("SELECT `id`,`name`,`qq`,`telephone` " +
+			" FROM bozhu_price_source " +
+			" where qq = #{0}")
+	PriceSource getSourcesByQq(String qq);
+
+	@Select("SELECT `id`,`name`,`qq`,`telephone` " +
+			" FROM bozhu_price_source " +
+			" where telephone = #{0}")
+	PriceSource getSourcesByTelephone(String telephone);
 
 }

@@ -1,23 +1,26 @@
 package cc.pp.sina.bozhus.weibos;
 
-import cc.pp.sina.bozhus.common.WeiboPropsAnalysis;
-import cc.pp.sina.bozhus.info.SinaWeiboInfoDao;
-import cc.pp.sina.bozhus.info.SinaWeiboInfoDaoImpl;
-import cc.pp.sina.domain.bozhus.UserAllWeibosDomain;
-import cc.pp.sina.tokens.service.TokenService;
-import com.sina.weibo.model.Status;
-import com.sina.weibo.model.StatusWapper;
-import com.sina.weibo.model.WeiboException;
-import net.sf.json.JSONArray;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
+
+import net.sf.json.JSONArray;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cc.pp.sina.bozhus.common.WeiboPropsAnalysis;
+import cc.pp.sina.bozhus.info.SinaWeiboInfoDao;
+import cc.pp.sina.bozhus.info.SinaWeiboInfoDaoImpl;
+import cc.pp.sina.domain.bozhus.UserAllWeibosDomain;
+import cc.pp.sina.tokens.service.TokenService;
+
+import com.sina.weibo.model.Status;
+import com.sina.weibo.model.StatusWapper;
+import com.sina.weibo.model.WeiboException;
 
 /**
  * 用户微博粉丝
@@ -51,7 +54,7 @@ public class UserAllWeibosParams {
 	 * @param singleNum：分析单条微博数
 	 */
 	public static UserAllWeibosDomain analysis(String uid, SinaWeiboInfoDao sinaWeiboInfoDao, int pageCount,
-											   int singleNum) throws WeiboException, SQLException {
+			int singleNum) {
 		/*
 		 * 变量初始化
 		 */
@@ -162,11 +165,20 @@ public class UserAllWeibosParams {
 		 * 数据结果整理
 		 */
 		// 原创微博比例
-		float oriratio = (float) original / weiboSum;
+		float oriratio = 0.0f;
+		if (weiboSum != 0) {
+			oriratio = (float) original / weiboSum;
+		}
 		// 原创中的平均转评量
-		float aveorirepcom = (float) allorirepcomcount / original;
+		float aveorirepcom = 0.0f;
+		if (original != 0) {
+			aveorirepcom = (float) allorirepcomcount / original;
+		}
 		// 平均转评量
-		float averepcom = (float) allrepcomcount / weiboSum;
+		float averepcom = 0.0f;
+		if (weiboSum != 0) {
+			averepcom = (float) allrepcomcount / weiboSum;
+		}
 		// 微博来源分布
 		HashMap<String, Integer> wbsource = WeiboPropsAnalysis.analysisTopNWbSources(wbsources, 5);
 		// 最近一周内的平均转评量

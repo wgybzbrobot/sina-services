@@ -12,6 +12,7 @@ import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cc.pp.sina.domain.error.ErrorResponse;
 import cc.pp.sina.domain.query.FloatRangeDomain;
 import cc.pp.sina.domain.query.IntRangeDomain;
 import cc.pp.sina.utils.java.JavaPattern;
@@ -19,7 +20,6 @@ import cc.pp.sina.utils.json.JsonUtils;
 import cc.pp.sina.utils.net.URLCode;
 import cc.pp.sina.web.application.BozhuLibraryApplication;
 import cc.pp.sina.web.domain.BozhusResult;
-import cc.pp.sina.web.domain.ErrorResponse;
 
 /**
  * 查询模块

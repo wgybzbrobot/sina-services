@@ -41,9 +41,7 @@ public class HighQualityUsersMain {
 		 */
 		logger.info("连接48数据库: ");
 		WeiboJDBC weiboJDBC = new WeiboJDBC("192.168.1.48", "pp_fenxi", "q#tmuYzC@sqB6!ok@sHd", "pp_fenxi");
-		if (!weiboJDBC.dbConnection()) {
-			logger.info("Db connected error.");
-		}
+
 		try {
 			weiboJDBC.createSinaBaseInfoTable(HighQualityUsersRun.PP_HIGH_QUALITY_USERS);
 		} catch (SQLException e) {

@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.pp.content.library.web.ContentDao">
+
+	<!-- 获取内容库数据表表名 -->
+	<select id="showTables" resultType="string">
+	    SHOW TABLES;
+	</select>
+
 	<!-- 获取某一天的内容库统计结果数据 -->
 	<select id="selectResult" parameterType="hashmap" resultType="ContentResult">
-		SELECT * FROM wb_content_result WHERE recordType = #{recordtype} AND date = #{date}
+		SELECT * FROM wb_content_result_new WHERE recordType = #{recordtype} AND
+		date = #{date}
 	</select>
+
 </mapper>

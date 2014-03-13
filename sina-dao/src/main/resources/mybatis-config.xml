@@ -53,6 +53,17 @@
 			type="cc.pp.sina.domain.weibos.WeiboSelectParams" />
 		<typeAlias alias="WeibosSelectParams"
 			type="cc.pp.sina.domain.weibos.WeibosSelectParams" />
+		<!-- T2数据分析相关 -->
+		<typeAlias alias="T2SinaUserInfo" type="cc.pp.sina.domain.t2.T2SinaUserInfo"/>
+		<typeAlias alias="T2TencentUserInfo" type="cc.pp.sina.domain.t2.T2TencentUserInfo"/>
+		<typeAlias alias="T2SingleWeiboInfo" type="cc.pp.sina.domain.t2.T2SingleWeiboInfo"/>
+		<typeAlias alias="T2SinaInteractionsInfo" type="cc.pp.sina.domain.t2.T2SinaInteractionsInfo"/>
+		<typeAlias alias="T2TencentInteractionsInfo" type="cc.pp.sina.domain.t2.T2TencentInteractionsInfo"/>
+		<typeAlias alias="SinaSelectParams" type="cc.pp.sina.domain.t2.SinaSelectParams"/>
+		<typeAlias alias="TencentSelectParams" type="cc.pp.sina.domain.t2.TencentSelectParams"/>
+		<!-- 微任务相关 -->
+		<typeAlias alias="BozhuExtendInfo" type="cc.pp.sina.domain.weirenwu.BozhuExtendInfo"/>
+		<typeAlias alias="SelectBozhuParams" type="cc.pp.sina.domain.weirenwu.SelectBozhuParams"/>
 	</typeAliases>
 	<environments default="local">
 		<environment id="local">
@@ -163,8 +174,8 @@
 			<transactionManager type="JDBC" />
 			<dataSource type="POOLED">
 				<property name="url" value="${db_url_friend1}" />
-				<property name="username" value="${db_username_wuhu}" />
-				<property name="password" value="${db_password_wuhu}" />
+				<property name="username" value="${fenxi.db.username}" />
+				<property name="password" value="${fenxi.db.password}" />
 				<property name="driver" value="${db_driver}" />
 				<property name="driver.encoding" value="${db_encoding}" />
 				<property name="poolPingEnabled" value="true" />
@@ -176,8 +187,8 @@
 			<transactionManager type="JDBC" />
 			<dataSource type="POOLED">
 				<property name="url" value="${db_url_friend2}" />
-				<property name="username" value="${db_username_wuhu}" />
-				<property name="password" value="${db_password_wuhu}" />
+				<property name="username" value="${fenxi.db.username}" />
+				<property name="password" value="${fenxi.db.password}" />
 				<property name="driver" value="${db_driver}" />
 				<property name="driver.encoding" value="${db_encoding}" />
 				<property name="poolPingEnabled" value="true" />
@@ -193,9 +204,9 @@
 				<property name="password" value="${db_password_other}" />
 				<property name="driver" value="${db_driver}" />
 				<property name="driver.encoding" value="${db_encoding}" />
-				<!-- <property name="poolPingEnabled" value="true" /> <property name="poolPingQuery" 
-					value="select 1" /> <property name="poolPingConnectionsNotUsedFor" value="5000" 
-					/> -->
+				<property name="poolPingEnabled" value="true" />
+				<property name="poolPingQuery" value="select 1" />
+				<property name="poolPingConnectionsNotUsedFor" value="5000" />
 			</dataSource>
 		</environment>
 	</environments>
@@ -210,6 +221,10 @@
 		<mapper resource="SinaWeibosDaoMapper.xml" />
 		<mapper resource="BozhuLibraryDaoMapper.xml" />
 		<mapper resource="PPUsersDaoMapper.xml" />
+		<mapper resource="T2UserFansDaoMapper.xml" />
+		<mapper resource="T2SingleWeiboDaoMapper.xml" />
+		<mapper resource="T2InteractionsDaoMapper.xml" />
+		<mapper resource="WeiRenWuDaoMapper.xml" />
 		<package name="cc.pp.sina.dao.price" />
 	</mappers>
 </configuration>

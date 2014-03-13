@@ -1,14 +1,10 @@
 package cc.pp.sina.web.resource;
 
-import cc.pp.sina.bozhus.single.weibo.Status;
-import cc.pp.sina.bozhus.single.weibo.Statuses;
 import org.restlet.data.Form;
 import org.restlet.resource.Get;
-import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import java.util.ArrayList;
-import java.util.List;
+import cc.pp.sina.bozhus.single.weibo.Statuses;
 
 /**
  * Created by chenwei on 14-2-14.

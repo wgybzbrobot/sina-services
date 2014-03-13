@@ -40,9 +40,6 @@ public class PPUserBaseInfoMain {
 		 */
 		logger.info("连接48数据库: ");
 		WeiboJDBC weiboJDBC = new WeiboJDBC("192.168.1.48", "pp_fenxi", "q#tmuYzC@sqB6!ok@sHd", "pp_fenxi");
-		if (!weiboJDBC.dbConnection()) {
-			logger.info("Db connected error.");
-		}
 
 		/**
 		 * 新浪数据接口

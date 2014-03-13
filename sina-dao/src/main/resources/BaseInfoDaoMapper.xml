@@ -5,17 +5,17 @@
 	<!-- 获取新浪用户粉丝数据 -->
 	<select id="getFansByUid" parameterType="long" resultType="SimpleFansInfo">
 		SELECT `username`,`fansuids`,`fanscount` FROM pp_sina_fans WHERE
-		`username` = #{uid};
+		`username` = #{uid} LIMIT 1;
 	</select>
 	
 	<!-- 获取博主基础数据信息 -->
 	<select id="getUserBaseInfo" parameterType="BaseInfoParams" resultType="BozhuBaseInfo">
-	    SELECT * FROM ${tablename} WHERE `id` = #{uid};
+	    SELECT * FROM ${tablename} WHERE `id` = #{uid} LIMIT 1;
 	</select>
 	
 	<!-- 获取新浪用户扩展数据 -->
 	<select id="getExtendInfo" parameterType="ExtendSelectParams" resultType="UserExtendInfo">
-		SELECT `username`,`tags`,`isppuser`,`isreal` FROM ${tablename} WHERE `username` = #{username};
+		SELECT `username`,`tags`,`isppuser`,`isreal` FROM ${tablename} WHERE `username` = #{username} LIMIT 1;
 	</select>
 
 </mapper>

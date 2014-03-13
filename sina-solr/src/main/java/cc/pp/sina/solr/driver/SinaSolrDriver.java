@@ -7,9 +7,11 @@ import cc.pp.sina.solr.demo.Demo;
 import cc.pp.sina.solr.index.IndexBozhuLibraryMain;
 import cc.pp.sina.solr.index.IndexPPUsersMain;
 import cc.pp.sina.solr.index.IndexSinaUsersMain;
+import cc.pp.sina.solr.index.IndexSinaUsersSingleNode;
 import cc.pp.sina.solr.index.IndexSinaUsersStandalone;
 import cc.pp.sina.solr.index.IndexSinaUsersThread;
 import cc.pp.sina.solr.index.IndexSinaWeibosThread;
+import cc.pp.sina.solr.index.TimerIndexSinaUsers;
 
 /**
  * 驱动类
@@ -55,8 +57,16 @@ public class SinaSolrDriver {
 			IndexBozhuLibraryMain.main(leftArgs);
 			break;
 		case "indexSinaUsersStandalone":
-			logger.info("单台机器建立数据索引：");
+			logger.info("单台机器建立数据索引，使用EmbeddedSolrServer：");
 			IndexSinaUsersStandalone.main(leftArgs);
+			break;
+		case "indexSinaUsersSingleNode":
+			logger.info("单台机器建立数据索引，使用HttpSolrServer：");
+			IndexSinaUsersSingleNode.main(leftArgs);
+			break;
+		case "timerIndexSinaUsers":
+			logger.info("定时单台机器建立数据索引，使用HttpSolrServer：");
+			TimerIndexSinaUsers.main(leftArgs);
 			break;
 		case "demo":
 			logger.info("测试： ");

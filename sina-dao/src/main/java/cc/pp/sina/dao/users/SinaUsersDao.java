@@ -30,6 +30,11 @@ public interface SinaUsersDao {
 	public UserInfo getSinaUserInfo(UserSelectParams userSelectParams);
 
 	/**
+	 * 判断某个用户存在与否
+	 */
+	public int isSinaUserExisted(UserSelectParams userSelectParams);
+
+	/**
 	 * 插入新浪用户基础信息
 	 */
 	public void insertSinaUserInfo(UserInsertParams userInsertParams);

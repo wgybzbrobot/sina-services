@@ -7,6 +7,7 @@ import cc.pp.content.library.statistic.ContentAnalysisDaily;
 import cc.pp.content.library.statistic.HeZuoFangPictures;
 import cc.pp.content.library.statistic.TimerContentAnalysis;
 import cc.pp.content.library.web.ContentApplication;
+import cc.pp.content.picture.PictureMain;
 
 /**
  * 驱动类
@@ -31,11 +32,7 @@ public class ContentLibraryDriver {
 		switch (args[0]) {
 		case "contentAnalysisDaily":
 			logger.info("皮皮内容库使用数据统计： ");
-			try {
-				ContentAnalysisDaily.main(leftArgs);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			ContentAnalysisDaily.main(leftArgs);
 			break;
 		case "timerContentAnalysis":
 			logger.info("定时统计皮皮内容库的使用数据： ");
@@ -48,6 +45,10 @@ public class ContentLibraryDriver {
 		case "heZuoFangPictures":
 			logger.info("定时器图片数据： ");
 			HeZuoFangPictures.main(leftArgs);
+			break;
+		case "pictureMain":
+			logger.info("图片使用统计：");
+			PictureMain.main(leftArgs);
 			break;
 		default:
 			return;

@@ -4,16 +4,13 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cc.pp.sina.bozhus.sql.WeiboJDBC;
 import cc.pp.sina.domain.bozhus.UserAllParamsDomain;
 import cc.pp.sina.query.index.BozhuIndex;
 
 public class IndexingDataDemo {
 
-	private static Logger logger = LoggerFactory.getLogger(IndexingDataDemo.class);
+	//	private static Logger logger = LoggerFactory.getLogger(IndexingDataDemo.class);
 
 	/**
 	 * 主函数
@@ -24,10 +21,7 @@ public class IndexingDataDemo {
 		 * 从数据库中读数据
 		 */
 		WeiboJDBC weiboJDBC = new WeiboJDBC("127.0.0.1", "root", "root", "pp_fenxi");
-		if (!weiboJDBC.dbConnection()) {
-			logger.info("Db connection error.");
-			return;
-		}
+
 		List<UserAllParamsDomain> bozhus = weiboJDBC.getSinaBozhuAllParams("sina_bozhus_library", 1, 10_0000);
 		weiboJDBC.dbClose();
 

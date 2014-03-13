@@ -31,9 +31,7 @@ public class RemoveRepeatsForTags {
 	public static void rmDuplication() {
 
 		WeiboJDBC weiboJDBC = new WeiboJDBC("192.168.1.48", "pp_fenxi", "q#tmuYzC@sqB6!ok@sHd", "pp_fenxi");
-		if (!weiboJDBC.dbConnection()) {
-			System.err.println("数据库链接失败！");
-		}
+
 		for (int i = 0; i < 10; i++) {
 			logger.info("Tackle at: " + i);
 			try {

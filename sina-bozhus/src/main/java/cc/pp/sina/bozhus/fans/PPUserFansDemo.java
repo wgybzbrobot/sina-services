@@ -8,14 +8,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cc.pp.sina.bozhus.sql.WeiboJDBC;
 
 public class PPUserFansDemo {
 
-	private static Logger logger = LoggerFactory.getLogger(PPUserFansDemo.class);
+	//	private static Logger logger = LoggerFactory.getLogger(PPUserFansDemo.class);
 
 	private static final String PP_USER_FANS = "pp_sina_fans";
 
@@ -27,9 +24,7 @@ public class PPUserFansDemo {
 		try (BufferedReader br = new BufferedReader(new FileReader(new File("pp_sina_uids_all")));
 				BufferedWriter bw = new BufferedWriter(new FileWriter(new File("pp_sina_uids")));) {
 			WeiboJDBC weiboJDBC = new WeiboJDBC("192.168.1.48", "pp_fenxi", "q#tmuYzC@sqB6!ok@sHd", "pp_fenxi");
-			if (!weiboJDBC.dbConnection()) {
-				logger.info("数据库连接失败！");
-			}
+
 			String uid;
 			int count = 1;
 			while ((uid = br.readLine()) != null) {

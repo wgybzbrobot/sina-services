@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.pp.sina.dao.t2.T2InteractionsDao">
+
+	<!-- 新浪 -->
+	<!-- 插入用户信息 -->
+	<insert id="insertT2SinaInteractions" parameterType="T2SinaInteractionsInfo"
+		useGeneratedKeys="true" keyProperty="id" flushCache="true"
+		statementType="PREPARED">
+		INSERT `t2_sina_interactions`
+		(`username`,`date`,`fanscount`,`allcount`,`emotionratio`,`lasttime`) VALUES
+		(#{username},#{date},#{fanscount},#{allcount},#{emotionratio},UNIX_TIMESTAMP());
+	</insert>
+	<!-- 获取分析结果 -->
+	<select id="selectT2SinaInteractions" parameterType="T2SinaInteractionsInfo"
+		resultType="T2SinaInteractionsInfo">
+		SELECT `username`,`date`,`fanscount`,`allcount`,`emotionratio` FROM
+		`t2_sina_interactions` WHERE `username` = #{username} AND `date` =
+		#{date};
+	</select>
+	<select id="selectT2SinaInteractionsList" parameterType="SinaSelectParams"
+		resultType="T2SinaInteractionsInfo">
+		SELECT `username`,`date`,`fanscount`,`allcount`,`emotionratio` FROM
+		`t2_sina_interactions` WHERE `username` = #{username} ORDER BY `date`
+		DESC LIMIT #{maxnum};
+	</select>
+	<!-- 删除用户 -->
+	<delete id="deleteT2SinaInteractions" parameterType="T2SinaInteractionsInfo">
+		DELETE FROM
+		`t2_sina_interactions` WHERE `username` = #{username} AND `date` =
+		#{date};
+	</delete>
+
+	<!-- 腾讯 -->
+	<!-- 插入用户信息 -->
+	<insert id="insertT2TencentInteractions" parameterType="T2TencentInteractionsInfo"
+		useGeneratedKeys="true" keyProperty="id" flushCache="true"
+		statementType="PREPARED">
+		INSERT `t2_tencent_interactions`
+		(`username`,`date`,`fanscount`,`allcount`,`emotionratio`,`lasttime`) VALUES
+		(#{username},#{date},#{fanscount},#{allcount},#{emotionratio},UNIX_TIMESTAMP());
+	</insert>
+	<!-- 获取分析结果 -->
+	<select id="selectT2TencentInteractions" parameterType="T2TencentInteractionsInfo"
+		resultType="T2TencentInteractionsInfo">
+		SELECT `username`,`date`,`fanscount`,`allcount`,`emotionratio` FROM
+		`t2_tencent_interactions` WHERE `username` = #{username} AND `date` =
+		#{date};
+	</select>
+	<select id="selectT2TencentInteractionsList" parameterType="TencentSelectParams"
+		resultType="T2TencentInteractionsInfo">
+		SELECT `username`,`date`,`fanscount`,`allcount`,`emotionratio` FROM
+		`t2_tencent_interactions` WHERE `username` = #{username} ORDER BY
+		`date` DESC LIMIT #{maxnum};
+	</select>
+	<!-- 删除用户 -->
+	<delete id="deleteT2TencentInteractions" parameterType="T2TencentInteractionsInfo">
+		DELETE
+		FROM
+		`t2_tencent_interactions` WHERE `username` = #{username} AND
+		`date` =
+		#{date};
+	</delete>
+
+</mapper>

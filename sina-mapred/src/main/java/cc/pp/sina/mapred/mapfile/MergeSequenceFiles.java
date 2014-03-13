@@ -35,7 +35,11 @@ public class MergeSequenceFiles {
 
 		FileStatus[] status = fs.listStatus(new Path(inPath));
 		Path[] tempFiles = FileUtil.stat2Paths(status);
+		/*
+		 * HDFS读文件的时候，忽略以下划线（“_”）开头的文件
+		 */
 		Path[] inFiles = new Path[tempFiles.length - 2];
+
 		int i = 0;
 		for (Path p : tempFiles) {
 			if (p.getName().contains("part")) {

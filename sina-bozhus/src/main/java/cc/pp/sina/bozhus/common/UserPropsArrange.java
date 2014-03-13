@@ -239,6 +239,13 @@ public class UserPropsArrange {
 		result.setActiveFansSum(activefanssum);
 	}
 
+	public static void arrangeActiveCount(FansAnalysisResult result, int[] quality, int allFansCount, int fansIdsSum,
+			int existuids) {
+		float r = (float) existuids / fansIdsSum;
+		int activefanssum = Math.round(((float) quality[1] / existuids) * allFansCount * r);
+		result.setActiveFansSum(activefanssum);
+	}
+
 	/**
 	 * 微博来源整理
 	 */

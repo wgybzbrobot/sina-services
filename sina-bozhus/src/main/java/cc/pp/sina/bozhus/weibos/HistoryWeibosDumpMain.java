@@ -53,10 +53,6 @@ public class HistoryWeibosDumpMain {
 		 * 链接数据库
 		 */
 		WeiboJDBC weiboJDBC = new WeiboJDBC("192.168.1.28", "pp_fenxi", "q#tmuYzC@sqB6!ok@sHd", "pp_fenxi");
-		if (!weiboJDBC.dbConnection()) {
-			logger.info("Db connected error.");
-			return;
-		}
 
 		/**
 		 * 创建存放表名数据表

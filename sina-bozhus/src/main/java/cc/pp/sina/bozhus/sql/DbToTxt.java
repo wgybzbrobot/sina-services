@@ -12,9 +12,6 @@ public class DbToTxt {
 	public static void main(String[] args) throws SQLException, IOException {
 
 		WeiboJDBC weiboJDBC = new WeiboJDBC("127.0.0.1", "root", "root", "pp_fenxi");
-		if (!weiboJDBC.dbConnection()) {
-			System.err.println("Db connected error.");
-		}
 
 		List<String> uids = weiboJDBC.getUids("a_bz_bozhu", 500_0000);
 

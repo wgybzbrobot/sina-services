@@ -55,6 +55,11 @@ CREATE TABLE IF NOT EXISTS `bozhu_detail` (
   `avg_valid_fan_cover_last100` bigint(11) NOT NULL COMMENT '最近100条微博的平均有效粉丝覆盖量',
   `identity_type` varchar(50) NOT NULL COMMENT '身份分类，如：草根大号，音乐达人',
   `industry_type` varchar(50) NOT NULL COMMENT '行业分类，如：IT，汽车',
+  `fans_age` char(250) NOT NULL COMMENT '粉丝年龄分布',
+  `fans_tags` varchar(500) NOT NULL COMMENT '粉丝标签数据',
+  `top5provinces` char(250) NOT NULL COMMENT '粉丝前5区域分布',
+  `wbsource` char(250) NOT NULL COMMENT '微博终端来源分布',
+  `usertags` char(250) NOT NULL COMMENT '用户标签数据',
   PRIMARY KEY (`bzid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='博主详细信息数据库';
 
@@ -68,7 +73,7 @@ DROP TABLE IF EXISTS `bozhu_price`;
 CREATE TABLE IF NOT EXISTS `bozhu_price` (
   `username` bigint(32) unsigned NOT NULL COMMENT '用户id',
   `sourceid` int(10) unsigned NOT NULL COMMENT 'bz_price_source表ID',
-  `typeid` tinyint(2) unsigned NOT NULL COMMENT '价格类型，1=软广转发；2=软广直发；3=硬广转发；4=硬广直发；5=带号(@)价',
+  `typeid` tinyint(2) unsigned NOT NULL COMMENT '价格类型，见价格类型表',
   `price` decimal(10,2) unsigned NOT NULL COMMENT '价格',
   `update_time` datetime NOT NULL,
   UNIQUE KEY `username_sourceid_typeid_unique` (`username`,`sourceid`,`typeid`),
@@ -104,11 +109,24 @@ CREATE TABLE IF NOT EXISTS `bozhu_price_source` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='博主价格渠道表' AUTO_INCREMENT=18 ;
 
 INSERT INTO `bozhu_price_source` (`id`, `name`, `qq`, `telephone`) VALUES
-	(1, '博主报价', '', ''),
-	(2, '分析价', '', ''),
+	(1, '博主报价', '', '18888888888'),
+	(2, '分析价', '123456', ''),
 	(3, '微博易价', '', ''),
 	(4, '微任务价', '', '');
 
+DROP TABLE IF EXISTS `bozhu_price_type`;
+CREATE TABLE IF NOT EXISTS `bozhu_price_type` (
+  `id` tinyint(2) unsigned NOT NULL,
+  `name` varchar(50) DEFAULT NULL COMMENT '价格类型名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `bozhu_price_type` (`id`, `name`) VALUES
+        (1, '软广转发'),
+        (2, '软广直发'),
+        (3, '硬广转发'),
+        (4, '硬广直发'),
+        (5, '带号(@)价');
 
 --
 -- 限制导出的表
@@ -125,6 +143,7 @@ ALTER TABLE `bozhu`
 --
 ALTER TABLE `bozhu_price`
   ADD CONSTRAINT `FK_bozhu_price_bozhu` FOREIGN KEY (`username`) REFERENCES `bozhu` (`username`),
-  ADD CONSTRAINT `FK_bozhu_price_bozhu_price_source` FOREIGN KEY (`sourceid`) REFERENCES `bozhu_price_source` (`id`);
+  ADD CONSTRAINT `FK_bozhu_price_bozhu_price_source` FOREIGN KEY (`sourceid`) REFERENCES `bozhu_price_source` (`id`),
+  ADD CONSTRAINT `FK_bozhu_price_bozhu_price_type` FOREIGN KEY (`typeid`) REFERENCES `bozhu_price_type` (`id`);
 
 set FOREIGN_KEY_CHECKS = 1;

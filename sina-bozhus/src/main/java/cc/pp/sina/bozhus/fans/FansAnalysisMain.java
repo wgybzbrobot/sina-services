@@ -40,9 +40,7 @@ public class FansAnalysisMain {
 		 */
 		logger.info("连接48数据库: ");
 		WeiboJDBC weiboJDBC = new WeiboJDBC("192.168.1.48", "pp_fenxi", "q#tmuYzC@sqB6!ok@sHd", "pp_fenxi");
-		if (!weiboJDBC.dbConnection()) {
-			logger.info("Db connected error.");
-		}
+
 		// 创建粉丝分析结果数据表
 		try {
 			weiboJDBC.createFansAnalysisTable(FansAnalysisInfoUtils.PP_SINA_FANS_ANALYSIS);

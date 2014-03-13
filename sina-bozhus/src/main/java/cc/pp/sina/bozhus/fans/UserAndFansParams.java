@@ -1,23 +1,31 @@
 package cc.pp.sina.bozhus.fans;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+
+import net.sf.json.JSONArray;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cc.pp.sina.algorithms.top.sort.InsertSort;
+import cc.pp.sina.algorithms.top.sort.PPSort;
 import cc.pp.sina.bozhus.common.OutStreamUtils;
 import cc.pp.sina.bozhus.common.UserPropsAnalysis;
 import cc.pp.sina.bozhus.common.UserPropsArrange;
 import cc.pp.sina.bozhus.info.SinaUserInfoDao;
 import cc.pp.sina.bozhus.info.SinaUserInfoDaoImpl;
+import cc.pp.sina.bozhus.tags.UserTagsParams;
 import cc.pp.sina.domain.bozhus.UserAndFansDomain;
 import cc.pp.sina.tokens.service.TokenService;
+import cc.pp.sina.utils.json.JsonUtils;
+
 import com.sina.weibo.model.User;
 import com.sina.weibo.model.UserWapper;
 import com.sina.weibo.model.WeiboException;
-import net.sf.json.JSONArray;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * 用户及其粉丝分析
@@ -30,6 +38,8 @@ import java.util.List;
 public class UserAndFansParams {
 
 	private static Logger logger = LoggerFactory.getLogger(UserAndFansParams.class);
+
+	private static final Random RANDOM = new Random();
 
 	/**
 	 * 测试函数
@@ -55,8 +65,7 @@ public class UserAndFansParams {
 	/**
 	 * 分析函数
 	 */
-	public static UserAndFansDomain analysis(String uid, SinaUserInfoDao sinaUserInfoDao, int pageCount)
-			throws WeiboException, SQLException {
+	public static UserAndFansDomain analysis(String uid, SinaUserInfoDao sinaUserInfoDao, int pageCount) {
 
 		/*
 		 * 获取用户基础信息
@@ -77,6 +86,10 @@ public class UserAndFansParams {
 		int[] quality = new int[2];
 		int[] verifiedRatio = new int[2];
 		int[] province = new int[101];
+		String[] topNUids = new String[10];
+		for (int i = 0; i < topNUids.length; i++) {
+			topNUids[i] = "0=0";
+		}
 
 		/*
 		 * 采集用户粉丝信息
@@ -103,6 +116,7 @@ public class UserAndFansParams {
 					} else {
 						continue;
 					}
+					topNUids = InsertSort.toptable(topNUids, u.getId() + "=" + u.getFollowersCount());
 					// 粉丝的粉丝数
 					allFansCount += u.getFollowersCount();
 					// 粉丝的活跃粉丝数
@@ -113,6 +127,7 @@ public class UserAndFansParams {
 			}
 		} catch (RuntimeException e) {
 			logger.info("User: " + uid + " baseinfo exists, but cann't get it's fans infos.");
+			throw new RuntimeException(e);
 		}
 		/*
 		 * 验证数据
@@ -121,17 +136,36 @@ public class UserAndFansParams {
 		//				province);
 
 		/**
+		 * 获取粉丝标签数据
+		 */
+		HashMap<String, Integer> fansTags = new HashMap<>();
+		List<String> tagsTemp;
+		for (String str : topNUids) {
+			if (str.length() > 5) {
+				tagsTemp = UserTagsParams.analysis(str.split("=")[0], sinaUserInfoDao, 10);
+				for (String tag : tagsTemp) {
+					if (fansTags.get(tag) == null) {
+						fansTags.put(tag, 1);
+					} else {
+						fansTags.put(tag, fansTags.get(tag) + 1);
+					}
+				}
+			}
+		}
+		fansTags = PPSort.sortedToHashMapInteger(fansTags, 20);
+
+		/**
 		 * 注意：当前的cursor值是采集的页数
 		 */
 		return UserAndFansParams.arrangeUser(user, cursor, existUids, gender, province, verifiedRatio, quality,
-				fansClassByFans, allFansCount, allActiveFansSount);
+				fansClassByFans, allFansCount, allActiveFansSount, fansTags);
 	}
 
 	/**
 	 * 粉丝单个用户数据
 	 */
 	public static void analysisUser(User user, int[] gender, int[] fansClassByFans, int[] quality, int[] verifiedRatio,
-									int[] province) {
+			int[] province) {
 
 		// 性别分析
 		gender[UserPropsAnalysis.analysisGender(user)]++;
@@ -149,7 +183,8 @@ public class UserAndFansParams {
 	 * 整理用户及其粉丝分析的最后结果类
 	 */
 	public static UserAndFansDomain arrangeUser(User user, int cursor, int existUids, int[] gender, int[] province,
-												int[] verifiedRatio, int[] quality, int[] fansClassByFans, long allFansCount, long allActiveFansSount) {
+			int[] verifiedRatio, int[] quality, int[] fansClassByFans, long allFansCount, long allActiveFansSount,
+			HashMap<String, Integer> fansTags) {
 
 		/*
 		 * 获取粉丝数、微博数、创建时间
@@ -178,6 +213,9 @@ public class UserAndFansParams {
 		if ((cursor * 200 >= user.getFollowersCount()) && (cursor * 200 < user.getFollowersCount() + 200)) {
 			fansExistedRatio = (float) existUids / user.getFollowersCount();
 			addvratio = (float) verifiedRatio[1] / user.getFollowersCount();
+		}
+		if (addvratio < 0.000001) {
+			addvratio = (float) RANDOM.nextInt(100) / 1000000;
 		}
 		// 男性比例
 		float maleratio = (float) gender[0] / existUids;
@@ -209,14 +247,14 @@ public class UserAndFansParams {
 				.setActivecount(activenum).setActivation(activation).setAddvratio(addvratio)
 				.setActiveratio(activeratio).setMaleratio(maleratio).setCreatedtime(usertimediff)
 				.setFansexistedratio(fansExistedRatio).setAllfanscount(allFansCount)
-				.setAllactivefanscount(allActiveFansSount).setTop5provinces(top5provinces).build();
+				.setAllactivefanscount(allActiveFansSount).setTop5provinces(top5provinces)
+				.setFanstags(JsonUtils.toJsonWithoutPretty(fansTags)).build();
 
 		return result;
 	}
 
 	public static void resultVerifyFans1(int existUids, long allFansCount, long allActiveFansSount, int[] gender,
-										 int[] fansClassByFans, int[] quality, int[] verifiedRatio,
-										 int[] province) {
+			int[] fansClassByFans, int[] quality, int[] verifiedRatio, int[] province) {
 
 		System.out.println("existUids: " + existUids);
 		System.out.println("allFansCount: " + allFansCount);

@@ -1,8 +1,14 @@
 package cc.pp.sina.domain.bozhus.price;
 
+import org.codehaus.jackson.map.annotate.JsonFilter;
+import org.codehaus.jackson.map.ser.FilterProvider;
+import org.codehaus.jackson.map.ser.impl.SimpleBeanPropertyFilter;
+import org.codehaus.jackson.map.ser.impl.SimpleFilterProvider;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonFilter("priceSourceFilter")
 public class PriceSource {
 	private Integer id;
 	private String name;
@@ -10,6 +16,12 @@ public class PriceSource {
 	private String telephone;
 	private Integer isDefault;
 	private List<Price> prices;
+
+	public static final FilterProvider emptyFilters = new SimpleFilterProvider().addFilter("priceSourceFilter",
+			SimpleBeanPropertyFilter.serializeAllExcept());
+
+	public static final FilterProvider basicInfoFilters = new SimpleFilterProvider().addFilter("priceSourceFilter",
+			SimpleBeanPropertyFilter.filterOutAllExcept("id", "name", "qq", "telephone"));
 
 	public PriceSource() {
 	}

@@ -1,10 +1,14 @@
 package cc.pp.sina.tokens.service;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Properties;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.util.*;
 
 public class TokenService {
 
@@ -79,6 +83,20 @@ public class TokenService {
 
 	public List<String> getRandomTokens() {
 		return sinaTokens;
+	}
+
+	/**
+	 * 获取最新的num条token信息
+	 */
+	public List<TokenInfo> getLastTokenInfos(int num) {
+		return tokenJDBC.getSinaTokenInfos(num);
+	}
+
+	/**
+	 * 根据Uid获取对应的最新token
+	 */
+	public String getTokenByUid(String uid) {
+		return tokenJDBC.getTokenByUid(uid);
 	}
 
 	/**

@@ -5,6 +5,8 @@ import java.util.List;
 import cc.pp.sina.domain.bozhus.UserTag;
 import cc.pp.sina.domain.bozhus.UserTagWapper;
 
+import com.sina.weibo.model.Comment;
+import com.sina.weibo.model.CommentWapper;
 import com.sina.weibo.model.User;
 import com.sina.weibo.model.UserWapper;
 
@@ -48,5 +50,12 @@ public interface SinaUserInfoDao {
 	public String transNickNameToUsername(String nickName);
 
 	public User transNickNameToUser(String nickName);
+
+	/**
+	 * 用户@数据，最新的提到当前登录用户的评论，即@我的评论
+	 */
+	public List<Comment> getCommentMentions(String uid, long time);
+
+	public CommentWapper getCommentMention(String uid, int page);
 
 }

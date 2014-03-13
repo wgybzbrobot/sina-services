@@ -35,7 +35,7 @@ public class HttpUtils {
 	 * @return
 	 *                           返回请求响应的HTML
 	 */
-	public String doGet(String url, String queryString, String charset, boolean pretty) {
+	public static String doGet(String url, String queryString, String charset, boolean pretty) {
 
 		StringBuffer response = new StringBuffer();
 		HttpClient client = new HttpClient();
@@ -71,12 +71,9 @@ public class HttpUtils {
 
 	/**
 	 * 重载函数
-	 * @param url
-	 * @param charset
-	 * @return
 	 */
-	public String doGet(String url, String charset) {
-		return this.doGet(url, "", charset, Boolean.TRUE);
+	public static String doGet(String url, String charset) {
+		return doGet(url, "", charset, Boolean.TRUE);
 	}
 
 	/**
@@ -89,7 +86,7 @@ public class HttpUtils {
 	 * @return
 	 *                           返回请求响应的HTML
 	 */
-	public String doPost(String url, String queryString, String charset, boolean pretty) {
+	public static String doPost(String url, String queryString, String charset, boolean pretty) {
 
 		StringBuffer response = new StringBuffer();
 		HttpClient client = new HttpClient();
@@ -125,12 +122,9 @@ public class HttpUtils {
 
 	/**
 	 * 重载函数
-	 * @param url
-	 * @param charset
-	 * @return
 	 */
-	public String doPost(String url, String charset) {
-		return this.doPost(url, "", charset, Boolean.TRUE);
+	public static String doPost(String url, String charset) {
+		return doPost(url, "", charset, Boolean.TRUE);
 	}
 
 }

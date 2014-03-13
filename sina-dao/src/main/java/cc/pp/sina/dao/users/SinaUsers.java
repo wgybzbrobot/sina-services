@@ -59,6 +59,17 @@ public class SinaUsers {
 	}
 
 	/**
+	 * 判断某个用户存在与否
+	 */
+	public boolean isSinaUserExisted(String tablename, long username) {
+		UserSelectParams userSelectParams = new UserSelectParams(tablename, username);
+		try (SqlSession sqlSession = sqlSessionFactory.openSession();) {
+			SinaUsersDao sinaUsersDao = sqlSession.getMapper(SinaUsersDao.class);
+			return (sinaUsersDao.getSinaUserInfo(userSelectParams) == null) ? false : true;
+		}
+	}
+
+	/**
 	 * 插入新浪用户基础信息
 	 */
 	public void insertSinaUserInfo(String tablename, User user) {

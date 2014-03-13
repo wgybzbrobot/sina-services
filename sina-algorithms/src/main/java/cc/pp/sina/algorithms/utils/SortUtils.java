@@ -76,6 +76,42 @@ public class SortUtils {
 		return sortedtemp;
 	}
 
+	public static List<String> sortedToMap(HashMap<Long, Integer> temp, int N) {
+
+		List<Map.Entry<Long, Integer>> resulttemp = new ArrayList<>(temp.entrySet());
+		Collections.sort(resulttemp, new Comparator<Map.Entry<Long, Integer>>() {
+			@Override
+			public int compare(Map.Entry<Long, Integer> o1, Map.Entry<Long, Integer> o2) {
+				return (o2.getValue() - o1.getValue());
+			}
+		});
+		List<String> sortedtemp = new ArrayList<String>();
+		for (int k = 0; k < Math.min(temp.size(), N); k++) {
+			sortedtemp.add(resulttemp.get(k).toString());
+		}
+
+		return sortedtemp;
+	}
+
+	public static HashMap<Long, Integer> sortedToList(HashMap<Long, Integer> temp, int N) {
+
+		List<Map.Entry<Long, Integer>> resulttemp = new ArrayList<>(temp.entrySet());
+		Collections.sort(resulttemp, new Comparator<Map.Entry<Long, Integer>>() {
+			@Override
+			public int compare(Map.Entry<Long, Integer> o1, Map.Entry<Long, Integer> o2) {
+				return (o2.getValue() - o1.getValue());
+			}
+		});
+		HashMap<Long, Integer> result = new HashMap<>();
+		String[] info;
+		for (int k = 0; k < Math.min(temp.size(), N); k++) {
+			info = resulttemp.get(k).toString().split("=");
+			result.put(Long.parseLong(info[0]), Integer.parseInt(info[1]));
+		}
+
+		return result;
+	}
+
 	/**
 	 * 排序成List<HashMap>
 	 */

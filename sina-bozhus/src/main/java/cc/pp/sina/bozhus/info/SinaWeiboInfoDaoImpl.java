@@ -13,6 +13,7 @@ import cc.pp.sina.tokens.service.TokenService;
 
 import com.sina.weibo.api.Timeline;
 import com.sina.weibo.model.Paging;
+import com.sina.weibo.model.Status;
 import com.sina.weibo.model.StatusWapper;
 import com.sina.weibo.model.WeiboException;
 
@@ -51,6 +52,31 @@ public class SinaWeiboInfoDaoImpl implements SinaWeiboInfoDao {
 	}
 
 	/**
+	 * 获取单条微博详细数据
+	 */
+	@Override
+	public Status getSingleWeiboDetail(String wid) {
+		String token = tokenService.getRandomToken();
+		Status status = null;
+		try {
+			status = timeLine.showStatus(wid, token);
+		} catch (WeiboException e) {
+			logger.info("ErrorCode=" + e.getErrorCode());
+			if (e.getErrorCode() == SinaErrorCode.ERROR_CODE_20003
+					|| e.getErrorCode() == SinaErrorCode.ERROR_CODE_20101) {
+				logger.info("The wid： " + wid + " does not exists!");
+				return null;
+			}
+			if (isRetry(e, token)) {
+				return getSingleWeiboDetail(wid);
+			}
+			throw new RuntimeException(String.format("WeiboException: %d\t%s\t%s", e.getErrorCode(), wid, token), e);
+		}
+
+		return status;
+	}
+
+	/**
 	 * 单条微博转发数据
 	 * @param cursor：从1开始
 	 */
@@ -83,15 +109,26 @@ public class SinaWeiboInfoDaoImpl implements SinaWeiboInfoDao {
 	public StatusWapper getSinaUserWeibos(String uid, int cursor) {
 
 		String token = tokenService.getRandomToken();
+		//		String token = tokenService.getTokenByUid(uid);
+		if (token == null) {
+			return null;
+		}
 		StatusWapper status = null;
 		try {
 			status = timeLine.getUserTimelineByUid(uid, new Paging(cursor, 100), 0, 0, token);
 			return status;
 		} catch (WeiboException e) {
 			if (e.getErrorCode() == SinaErrorCode.ERROR_CODE_20003) {
-				logger.info("User： " + uid + " does not exists!");
+				logger.error("User： " + uid + " does not exists!");
 				return null;
 			}
+			//			if (e.getErrorCode() == SinaErrorCode.ERROR_CODE_APPKEY_MISSING) {
+			//				logger.error("User： " + uid + "'s source paramter (appkey) is missing");
+			//				return null;
+			//			}
+			//			if (isRetry1(e, token)) {
+			//				return getSinaUserWeibos(uid, cursor);
+			//			}
 			if (isRetry(e, token)) {
 				return getSinaUserWeibos(uid, cursor);
 			}
@@ -141,6 +178,36 @@ public class SinaWeiboInfoDaoImpl implements SinaWeiboInfoDao {
 		case SinaErrorCode.ERROR_CODE_TOKEN_3:
 		case SinaErrorCode.ERROR_CODE_TOKEN_4:
 		case SinaErrorCode.ERROR_CODE_APPKEY_MISSING:
+		case SinaErrorCode.ERROR_CODE_REMOTE_SERVICE:
+		case SinaErrorCode.ERROR_CODE_502:
+		case SinaErrorCode.ERROR_CODE_21332:
+			tokenService.deleteInValidToken(token);
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	public boolean isRetry1(WeiboException e, String token) {
+		switch (e.getErrorCode()) {
+		case SinaErrorCode.ERROR_CODE_IP_REQUESTS_OUT_OF_RATE_LIMIT:
+			try {
+				logger.info("weibo API: IP requests out of rate limit.");
+				// 休眠一段时间，以降低请求频率
+				Thread.sleep(60 * 1000);
+			} catch (InterruptedException e1) {
+				// Ignore
+			}
+			return true;
+		case SinaErrorCode.ERROR_CODE_SYSTEM_ERROR:
+			logger.info("weibo API: System error.");
+			return true;
+		case SinaErrorCode.ERROR_CODE_EXPIRED_TOKEN:
+		case SinaErrorCode.ERROR_CODE_TOKEN_1:
+		case SinaErrorCode.ERROR_CODE_TOKEN_2:
+		case SinaErrorCode.ERROR_CODE_TOKEN_3:
+		case SinaErrorCode.ERROR_CODE_TOKEN_4:
+			//		case SinaErrorCode.ERROR_CODE_APPKEY_MISSING:
 		case SinaErrorCode.ERROR_CODE_REMOTE_SERVICE:
 		case SinaErrorCode.ERROR_CODE_502:
 		case SinaErrorCode.ERROR_CODE_21332:

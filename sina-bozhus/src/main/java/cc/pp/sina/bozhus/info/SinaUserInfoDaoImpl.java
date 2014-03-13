@@ -12,9 +12,13 @@ import cc.pp.sina.domain.bozhus.UserTagWapper;
 import cc.pp.sina.tokens.service.TokenService;
 import cc.pp.sina.utils.java.JavaPattern;
 
+import com.sina.weibo.api.Comments;
 import com.sina.weibo.api.Friendships;
 import com.sina.weibo.api.Tags;
 import com.sina.weibo.api.Users;
+import com.sina.weibo.model.Comment;
+import com.sina.weibo.model.CommentWapper;
+import com.sina.weibo.model.Paging;
 import com.sina.weibo.model.Tag;
 import com.sina.weibo.model.TagWapper;
 import com.sina.weibo.model.User;
@@ -30,6 +34,7 @@ public class SinaUserInfoDaoImpl implements SinaUserInfoDao {
 	private static Users users = new Users();
 	private static Friendships friendships = new Friendships();
 	private static Tags tags = new Tags();
+	private static Comments comments = new Comments();
 
 	private final TokenService tokenService;
 
@@ -264,6 +269,60 @@ public class SinaUserInfoDaoImpl implements SinaUserInfoDao {
 						token), e);
 			}
 		}
+	}
+
+	/**
+	 * 获取@我的评论
+	 */
+	@Override
+	public List<Comment> getCommentMentions(String uid, long time) {
+
+		List<Comment> result = new ArrayList<>();
+		int page = 1;
+		boolean flag = true;
+		while (flag) {
+			CommentWapper temp = null;
+			try {
+				temp = getCommentMention(uid, page);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			if (page * 200 > temp.getTotalNumber() + 200) {
+				flag = false;
+			}
+			for (int i = 0; i < temp.getComments().size(); i++) {
+				if (temp.getComments().get(i).getCreatedAt().getTime() / 1000 < time - 86400) {
+					flag = false;
+					break;
+				}
+				result.add(temp.getComments().get(i));
+			}
+		}
+
+		return result;
+	}
+
+	@Override
+	public CommentWapper getCommentMention(String uid, int page) {
+
+		String token = tokenService.getRandomToken();
+		CommentWapper result = null;
+		try {
+			result = comments.getCommentMentions(new Paging(page++, 200), 0, 0, token);
+		} catch (WeiboException e) {
+			if (e.getErrorCode() == SinaErrorCode.ERROR_CODE_20003) {
+				logger.info("User '" + uid + "' does not exists!");
+				return null;
+			} else {
+				if (isRetry(e, token)) {
+					return getCommentMention(uid, page);
+				}
+				throw new RuntimeException(String.format("WeiboException: %d\t%s\t%s", e.getErrorCode(), uid,
+						token), e);
+			}
+		}
+
+		return result;
 	}
 
 	/**

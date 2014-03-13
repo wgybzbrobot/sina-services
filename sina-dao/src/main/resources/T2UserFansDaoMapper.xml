@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.pp.sina.dao.t2.T2UserFansDao">
+
+	<!-- 新浪 -->
+	<!-- 获取待分析uid -->
+	<select id="getSinaNewUids" resultType="string">
+	    SELECT `username` FROM `t2_sina_user_fans` WHERE `fansresult` = '';
+	</select>
+	<select id="getSinaAllUids" resultType="string">
+	    SELECT `username` FROM `t2_sina_user_fans`;
+	</select>
+	<!-- 插入用户信息 -->
+	<insert id="insertT2SinaUser" parameterType="long"
+		useGeneratedKeys="true" keyProperty="id" flushCache="true"
+		statementType="PREPARED">
+		INSERT `t2_sina_user_fans`
+		(`username`,`fansresult`,`lasttime`) VALUES
+		(#{username},"",UNIX_TIMESTAMP());
+	</insert>
+	<!-- 更新分析结果 -->
+	<update id="updateT2SinaUser" parameterType="T2SinaUserInfo">
+		UPDATE
+		`t2_sina_user_fans` SET `fansresult` = #{fansresult},`lasttime`
+		=
+		UNIX_TIMESTAMP() WHERE `username` = #{username};
+	</update>
+	<!-- 获取分析结果 -->
+	<select id="selectT2SinaUser" parameterType="long" resultType="T2SinaUserInfo">
+		SELECT `username`,`fansresult` FROM `t2_sina_user_fans` WHERE
+		`username` = #{username};
+	</select>
+	<!-- 删除用户 -->
+	<delete id="deleteT2SinaUser" parameterType="long">
+		DELETE FROM
+		`t2_sina_user_fans` WHERE `username` = #{username};
+	</delete>
+
+	<!-- 腾讯 -->
+	<!-- 获取待分析uid -->
+	<select id="getTencentNewUids" resultType="string">
+	    SELECT `username` FROM `t2_tencent_user_fans` WHERE `fansresult` = '';
+	</select>
+	<select id="getTencentAllUids" resultType="string">
+	    SELECT `username` FROM `t2_tencent_user_fans`;
+	</select>
+	<!-- 插入用户信息 -->
+	<insert id="insertT2TencentUser" parameterType="string"
+		useGeneratedKeys="true" keyProperty="id" flushCache="true"
+		statementType="PREPARED">
+		INSERT `t2_tencent_user_fans`
+		(`username`,`fansresult`,`lasttime`) VALUES
+		(#{username},"",UNIX_TIMESTAMP());
+	</insert>
+	<!-- 更新分析结果 -->
+	<update id="updateT2TencentUser" parameterType="T2TencentUserInfo">
+		UPDATE
+		`t2_tencent_user_fans` SET `fansresult` = #{fansresult},`lasttime`
+		=
+		UNIX_TIMESTAMP() WHERE `username` = #{username};
+	</update>
+	<!-- 获取分析结果 -->
+	<select id="selectT2TencentUser" parameterType="string" resultType="T2TencentUserInfo">
+		SELECT `username`,`fansresult` FROM `t2_tencent_user_fans` WHERE
+		`username` = #{username};
+	</select>
+	<!-- 删除用户 -->
+	<delete id="deleteT2TencentUser" parameterType="string">
+		DELETE FROM
+		`t2_tencent_user_fans` WHERE `username` = #{username};
+	</delete>
+
+</mapper>

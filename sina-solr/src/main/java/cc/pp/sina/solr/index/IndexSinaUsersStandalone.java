@@ -10,6 +10,7 @@ import org.apache.solr.core.CoreContainer;
 
 /**
  * 用一台机器提供Solr服务，位于北京114.112.65.13服务器下。
+ * 有待修正。。。
  * @author wgybzb
  *
  */

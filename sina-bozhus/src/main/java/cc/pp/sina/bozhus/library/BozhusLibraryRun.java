@@ -11,8 +11,6 @@ import cc.pp.sina.bozhus.info.SinaWeiboInfoDao;
 import cc.pp.sina.bozhus.sql.WeiboJDBC;
 import cc.pp.sina.domain.bozhus.UserAllParamsDomain;
 
-import com.sina.weibo.model.WeiboException;
-
 public class BozhusLibraryRun implements Runnable {
 
 	private static Logger logger = LoggerFactory.getLogger(BozhusLibraryRun.class);
@@ -91,9 +89,6 @@ public class BozhusLibraryRun implements Runnable {
 			//					.setAvg_valid_fan_cover_last100(bozhu.getAveexposionsum()).build();
 			//			BozhukuHttpUtils.doBozhuInfoConnectionKeepAlive(BozhukuHttpUtils.getBozhuInfoUrl(uid, "sina"), JSONArray
 			//					.fromObject(bozhuInfo).get(0).toString(), "put");
-		} catch (WeiboException e) {
-			logger.info("WeiboException is occurs in User: " + uid);
-			e.printStackTrace();
 		} catch (SQLException e) {
 			logger.info("SQLException is occurs in User: " + uid);
 			e.printStackTrace();

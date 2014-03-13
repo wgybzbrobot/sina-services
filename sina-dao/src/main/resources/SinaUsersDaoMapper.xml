@@ -12,7 +12,7 @@
 		SELECT `id`,`screen_name`,`name`,`province`,`city`,`location`,`description`,`url`,`profile_image_url`,
 		`domain`,`gender`,`followers_count`,`friends_count`,`statuses_count`,`favourites_count`,`created_at`,
 		`verified`,`verified_type`,`avatar_large`,`bi_followers_count`,`remark`,`verified_reason`,`weihao`
-		 FROM ${tablename} WHERE `bid` BETWEEN #{low} AND #{high};
+		 FROM ${tablename} WHERE `name` != 'unexisted' AND `bid` BETWEEN #{low} AND #{high};
 	</select>
 
 	<!-- 获取新浪用户基础信息，单个查询 -->
@@ -21,6 +21,11 @@
 		`domain`,`gender`,`followers_count`,`friends_count`,`statuses_count`,`favourites_count`,`created_at`,
 		`verified`,`verified_type`,`avatar_large`,`bi_followers_count`,`remark`,`verified_reason`,`weihao`
 		 FROM ${tablename} WHERE `id` = #{username} LIMIT 1;
+	</select>
+	
+	<!-- 判断新浪某个用户存在与否 -->
+	<select id="isSinaUserExisted" parameterType="UserSelectParams" resultType="int">
+	    SELECT `bid` FROM ${tablename} WHERE `id` = #{username} LIMIT 1;
 	</select>
 
 	<!-- 插入新浪用户基础信息 -->

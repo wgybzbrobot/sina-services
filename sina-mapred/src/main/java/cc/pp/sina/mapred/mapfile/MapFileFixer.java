@@ -27,7 +27,6 @@ public class MapFileFixer {
 
 		Configuration conf = new Configuration();
 		FileSystem fs = FileSystem.get(URI.create(uri), conf);
-
 		Path map = new Path(uri);
 		Path mapData = new Path(map, MapFile.DATA_FILE_NAME);
 		SequenceFile.Reader reader = new SequenceFile.Reader(fs, mapData, conf);

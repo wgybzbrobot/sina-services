@@ -32,7 +32,6 @@ public class WeiboJDBC {
 	private static Logger logger = LoggerFactory.getLogger(WeiboJDBC.class);
 
 	private String db_driver;
-
 	private String db_user;
 	private String db_password;
 	private String db_name;
@@ -48,6 +47,7 @@ public class WeiboJDBC {
 	public WeiboJDBC() {
 		dbInit();
 		db_url = "jdbc:mysql://" + db_ip + ":" + db_port + "/" + db_name + "?useUnicode=true&characterEncoding=utf-8";
+		dbConnection();
 	}
 
 	/**
@@ -58,37 +58,13 @@ public class WeiboJDBC {
 		db_user = dbuser;
 		db_password = dbpassword;
 		db_url = "jdbc:mysql://" + dbip + ":3306/" + dbname + "?useUnicode=true&characterEncoding=utf-8";
-	}
-
-	/**
-	 * 链接数据库
-	 */
-	public boolean dbConnection() {
-		dataSource = new BasicDataSource();
-		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUsername(db_user);
-		dataSource.setPassword(db_password);
-		dataSource.setUrl(db_url);
-		dataSource.setTestOnBorrow(true);
-		dataSource.setValidationQuery("select 1");
-		return true;
-	}
-
-	/**
-	 * 获取链接
-	 */
-	private Connection getConnection() {
-		try {
-			return dataSource.getConnection();
-		} catch (SQLException e) {
-			throw new RuntimeException();
-		}
+		dbConnection();
 	}
 
 	/**
 	 * 初始化数据库相关参数
 	 */
-	public void dbInit() {
+	private void dbInit() {
 		Properties props = null;
 		try {
 			props = WbDbParamsRead.getDbParams();
@@ -100,6 +76,30 @@ public class WeiboJDBC {
 			db_port = props.getProperty("db.port");
 		} catch (IOException e) {
 			logger.info("Db params read error." + getClass());
+		}
+	}
+
+	/**
+	 * 链接数据库
+	 */
+	private void dbConnection() {
+		dataSource = new BasicDataSource();
+		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+		dataSource.setUsername(db_user);
+		dataSource.setPassword(db_password);
+		dataSource.setUrl(db_url);
+		dataSource.setTestOnBorrow(true);
+		dataSource.setValidationQuery("select 1");
+	}
+
+	/**
+	 * 获取链接
+	 */
+	private Connection getConnection() {
+		try {
+			return dataSource.getConnection();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
 		}
 	}
 

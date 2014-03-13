@@ -87,6 +87,10 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+		</dependency>
 		<!-- 中文分词模块 -->
 		<dependency>
 			<groupId>org.apache.lucene</groupId>

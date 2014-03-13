@@ -47,9 +47,6 @@ public class PPUserFansUpdateMain {
 		 */
 		logger.info("连接28数据库: ");
 		WeiboJDBC weiboJDBC = new WeiboJDBC("192.168.1.28", "pp_fenxi", "q#tmuYzC@sqB6!ok@sHd", "pp_fenxi");
-		if (!weiboJDBC.dbConnection()) {
-			logger.info("Db connected error.");
-		}
 
 		// 创建皮皮新浪用户粉丝更新表
 		try {

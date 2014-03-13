@@ -41,9 +41,7 @@ public class LocalBaseInfoDump {
 	public static void dumpBaseinfo() throws Exception {
 
 		WeiboJDBC weiboJDBC = new WeiboJDBC("127.0.0.1", "root", "root", "pp_fenxi");
-		if (!weiboJDBC.dbConnection()) {
-			logger.info("数据库链接失败!");
-		}
+
 		TokenService tokenService = new TokenService();
 		List<String> sinaTokens = weiboJDBC.getSinaToken("wb_member_bind_sina");
 		tokenService.setSinaTokens(sinaTokens);

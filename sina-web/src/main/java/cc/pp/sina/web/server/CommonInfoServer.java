@@ -80,7 +80,7 @@ public class CommonInfoServer {
 				return (JacksonConverter) converterHelper;
 			}
 		}
-		throw new RuntimeException("Can not found JacksonConverter.");
+		throw new RuntimeException("Can not find JacksonConverter.");
 	}
 
 }

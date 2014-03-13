@@ -41,7 +41,7 @@ public class PPSort {
 	 */
 	public static HashMap<String, Float> sortedToHashMap(HashMap<String, Float> temp, int N) {
 
-		List<Map.Entry<String, Float>> resulttemp = new ArrayList<Map.Entry<String, Float>>(temp.entrySet());
+		List<Map.Entry<String, Float>> resulttemp = new ArrayList<>(temp.entrySet());
 		Collections.sort(resulttemp, new Comparator<Map.Entry<String, Float>>() {
 			@Override
 			public int compare(Map.Entry<String, Float> o1, Map.Entry<String, Float> o2) {
@@ -49,10 +49,29 @@ public class PPSort {
 			}
 		});
 
-		HashMap<String, Float> sortedtemp = new HashMap<String, Float>();
+		HashMap<String, Float> sortedtemp = new HashMap<>();
 		for (int k = 0; k < Math.min(temp.size(), N); k++) {
 			String[] t = resulttemp.get(k).toString().split("=");
 			sortedtemp.put(t[0], Float.parseFloat(t[1]));
+		}
+
+		return sortedtemp;
+	}
+
+	public static HashMap<String, Integer> sortedToHashMapInteger(HashMap<String, Integer> temp, int N) {
+
+		List<Map.Entry<String, Integer>> resulttemp = new ArrayList<>(temp.entrySet());
+		Collections.sort(resulttemp, new Comparator<Map.Entry<String, Integer>>() {
+			@Override
+			public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+				return o2.getValue() - o1.getValue();
+			}
+		});
+
+		HashMap<String, Integer> sortedtemp = new HashMap<>();
+		for (int k = 0; k < Math.min(temp.size(), N); k++) {
+			String[] t = resulttemp.get(k).toString().split("=");
+			sortedtemp.put(t[0], Integer.parseInt(t[1]));
 		}
 
 		return sortedtemp;

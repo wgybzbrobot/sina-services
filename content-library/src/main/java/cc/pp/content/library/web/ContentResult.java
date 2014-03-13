@@ -1,6 +1,5 @@
 package cc.pp.content.library.web;
 
-
 public class ContentResult {
 
 	private int id;
@@ -30,6 +29,8 @@ public class ContentResult {
 	private String sendStatus; // 21、发送状态情况
 	private String allKeywords; // 22、所有关键词(按词频)
 	private String keywordsOfTopNContent; // 23、top100内容中的关键词
+
+	private String columnUsedDetailed; // 栏目使用详细数据
 
 	public int getId() {
 		return id;
@@ -245,6 +246,14 @@ public class ContentResult {
 
 	public void setKeywordsOfTopNContent(String keywordsOfTopNContent) {
 		this.keywordsOfTopNContent = keywordsOfTopNContent;
+	}
+
+	public String getColumnUsedDetailed() {
+		return columnUsedDetailed;
+	}
+
+	public void setColumnUsedDetailed(String columnUsedDetailed) {
+		this.columnUsedDetailed = columnUsedDetailed;
 	}
 
 }

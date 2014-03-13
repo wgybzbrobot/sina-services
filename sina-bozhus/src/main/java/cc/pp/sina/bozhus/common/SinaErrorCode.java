@@ -27,4 +27,7 @@ public class SinaErrorCode {
 	// 20003，用户不存在
 	public static final int ERROR_CODE_20003 = 20003;
 
+	// 微博不存在
+	public static final int ERROR_CODE_20101 = 20101;
+
 }
