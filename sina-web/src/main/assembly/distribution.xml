@@ -17,6 +17,7 @@
 				<include>weibo_db.properties</include>
 				<include>log4j.properties</include>
 				<include>tokens_db.properties</include>
+				<include>sinaweibo_config.properties</include>
 			</includes>
 			<outputDirectory>/conf</outputDirectory>
 			<filtered>true</filtered>

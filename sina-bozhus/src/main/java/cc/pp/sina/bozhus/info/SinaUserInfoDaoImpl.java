@@ -129,6 +129,10 @@ public class SinaUserInfoDaoImpl implements SinaUserInfoDao {
 				logger.info("User '" + uid + "' does not exists!");
 				return null;
 			}
+			if (e.getErrorCode() == SinaErrorCode.ERROR_CODE_10025) {
+				logger.info("User '" + uid + "' fuid is wrong!");
+				return null;
+			}
 			if (isRetry(e, token)) {
 				return getSinaUserTags(uid, maxTags);
 			}
@@ -341,6 +345,9 @@ public class SinaUserInfoDaoImpl implements SinaUserInfoDao {
 			return true;
 		case SinaErrorCode.ERROR_CODE_SYSTEM_ERROR:
 			logger.info("weibo API: System error.");
+			return true;
+		case SinaErrorCode.ERROR_CODE_10011:
+			logger.info("RPC error.");
 			return true;
 		case SinaErrorCode.ERROR_CODE_EXPIRED_TOKEN:
 		case SinaErrorCode.ERROR_CODE_APPKEY_MISSING:

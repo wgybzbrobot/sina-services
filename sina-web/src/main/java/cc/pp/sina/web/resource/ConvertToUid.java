@@ -1,4 +1,7 @@
-package cc.pp.sina.web.trans.uid;
+package cc.pp.sina.web.resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cc.pp.sina.bozhus.info.SinaUserInfoDaoImpl;
 import cc.pp.sina.bozhus.trans.uid.TransToUid;
@@ -13,16 +16,15 @@ import com.sina.weibo.model.User;
  */
 public class ConvertToUid {
 
-	//	private static Logger logger = LoggerFactory.getLogger(ConvertToUid.class);
+	private static Logger logger = LoggerFactory.getLogger(ConvertToUid.class);
 
 	private final TransToUid transToUid;
 
 	public ConvertToUid() {
-		//		TokenService tokenService = new TokenService("127.0.0.1", "root", "root", "pp_fenxi");
-		TokenService tokenService = new TokenService();
 		try {
-			transToUid = new TransToUid(new SinaUserInfoDaoImpl(tokenService));
+			transToUid = new TransToUid(new SinaUserInfoDaoImpl(new TokenService()));
 		} catch (Exception e) {
+			logger.error("Exception: " + e.getMessage());
 			throw new RuntimeException(e);
 		}
 	}

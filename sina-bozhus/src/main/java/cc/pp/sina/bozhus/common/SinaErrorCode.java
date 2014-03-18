@@ -30,4 +30,13 @@ public class SinaErrorCode {
 	// 微博不存在
 	public static final int ERROR_CODE_20101 = 20101;
 
+	// RPC错误
+	public static final int ERROR_CODE_10011 = 10011;
+
+	// 用户帐号被冻结
+	public static final int ERROR_CODE_20145 = 20145;
+
+	// fuid is wrong!
+	public static final int ERROR_CODE_10025 = 10025;
+
 }

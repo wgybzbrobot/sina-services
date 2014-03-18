@@ -11,7 +11,7 @@ import cc.pp.sina.web.conf.Config;
  * T2相关数据服务
  *
  * 示例：
- *         1、http://localhost:4321/t2/type/{type}/uids/post
+ *         1、http://localhost:4321/t2/ type/{type}/uids/post
  *              ["1835127861","1097201945","1904746890"]
  *              ["herky828","zsuzjl328","shifang"]
  *         2、http://localhost:4321/t2/type/{type}/uid/{uid}/get

@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 import cc.pp.sina.dao.tool.TransUid;
 import cc.pp.sina.domain.tool.TransUidInfo;
 import cc.pp.sina.utils.threads.pool.ApplyThreadPool;
-import cc.pp.sina.web.resource.TransUidResource;
-import cc.pp.sina.web.trans.uid.ConvertToUid;
+import cc.pp.sina.web.resource.ConvertResource;
+import cc.pp.sina.web.resource.ConvertToUid;
 
 import com.sina.weibo.model.User;
 
@@ -39,8 +39,9 @@ public class ToolApplication extends Application {
 	@Override
 	public Restlet createInboundRoot() {
 		Router router = new Router(getContext());
-		router.attach("/trans", TransUidResource.class);
-		router.attach("/trans/{identify}", TransUidResource.class);
+		//		router.attach("/trans", TransUidResource.class);
+		//		router.attach("/trans/{identify}", TransUidResource.class);
+		router.attach("/trans/{url}", ConvertResource.class);
 		return router;
 	}
 
@@ -94,7 +95,7 @@ public class ToolApplication extends Application {
 	}
 
 	/**
-	 * 批量计算
+	 * 批量计算http://weibo.com/u/
 	 */
 	public class BatchTransRun implements Runnable {
 
@@ -153,7 +154,7 @@ public class ToolApplication extends Application {
 	/**
 	 * 新浪用户域名转换成User
 	 */
-	private User getDidToUser(String url) {
+	public User getDidToUser(String url) {
 		return convertToUid.convertDomainToUser(url);
 	}
 

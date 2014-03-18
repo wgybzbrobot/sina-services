@@ -21,16 +21,16 @@ public class T2SingleWeiboTimerTask {
 
 	public static class T2SWTimeTask extends TimerTask {
 
-		private static T2SingleWeiboAnalysis simgleWeiboAnalysis;
+		private static T2SingleWeiboAnalysis singleWeiboAnalysis;
 
 		public T2SWTimeTask() {
 			SinaWeiboInfoDao sinaWeiboInfoDao = new SinaWeiboInfoDaoImpl(new TokenService());
-			simgleWeiboAnalysis = new T2SingleWeiboAnalysis(sinaWeiboInfoDao);
+			singleWeiboAnalysis = new T2SingleWeiboAnalysis(sinaWeiboInfoDao);
 		}
 
 		@Override
 		public void run() {
-			simgleWeiboAnalysis.insertSingleWeiboResult();
+			singleWeiboAnalysis.insertSingleWeiboResult();
 		}
 	}
 

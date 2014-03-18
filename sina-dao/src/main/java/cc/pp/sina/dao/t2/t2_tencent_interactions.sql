@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: 2014-03-12 13:32:02
+-- Generation Time: 2014-03-18 10:45:04
 -- 服务器版本： 5.5.34-MariaDB-log
 -- PHP Version: 5.5.7
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `t2_tencent_interactions` (
   `lasttime` int(10) NOT NULL COMMENT '纪录时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_date` (`username`,`date`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

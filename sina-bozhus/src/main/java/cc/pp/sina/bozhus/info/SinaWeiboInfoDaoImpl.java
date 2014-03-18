@@ -122,6 +122,10 @@ public class SinaWeiboInfoDaoImpl implements SinaWeiboInfoDao {
 				logger.error("User： " + uid + " does not exists!");
 				return null;
 			}
+			if (e.getErrorCode() == SinaErrorCode.ERROR_CODE_20145) {
+				logger.error("User： " + uid + " account is frozen, and the relevant contents are not available.");
+				return null;
+			}
 			//			if (e.getErrorCode() == SinaErrorCode.ERROR_CODE_APPKEY_MISSING) {
 			//				logger.error("User： " + uid + "'s source paramter (appkey) is missing");
 			//				return null;
@@ -171,6 +175,9 @@ public class SinaWeiboInfoDaoImpl implements SinaWeiboInfoDao {
 			return true;
 		case SinaErrorCode.ERROR_CODE_SYSTEM_ERROR:
 			logger.info("weibo API: System error.");
+			return true;
+		case SinaErrorCode.ERROR_CODE_10011:
+			logger.info("RPC error.");
 			return true;
 		case SinaErrorCode.ERROR_CODE_EXPIRED_TOKEN:
 		case SinaErrorCode.ERROR_CODE_TOKEN_1:

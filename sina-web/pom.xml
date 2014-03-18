@@ -150,6 +150,7 @@
 						<exclude>weibo_db.properties</exclude>
 						<exclude>tokens_db.properties</exclude>
 						<exclude>log4j.properties</exclude>
+						<exclude>sinaweibo_config.properties</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
